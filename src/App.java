@@ -1,9 +1,11 @@
 
 import javax.swing.*;
 
-import app.frontend.components.SideBar;
+import app.frontend.components.*;
+import app.frontend.components.Button.ButtonInfo;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.*;
 
 import res.fonts.FontsManager;
@@ -34,9 +36,18 @@ public class App extends JFrame {
 	}
 
 	void addComponents() throws IOException {
+
+		Navigation navigation = new Navigation(300, 300, null);
+		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), "teacher");
+		navigation.setItem("Disciplinas", ImagesManager.getClassIcon(), "class");
+		navigation.setItem("Alunos", ImagesManager.getStudentIcon(), "student");
+		navigation.setItem("Artigos", ImagesManager.getPaperIcon(), "paper");
+		navigation.setItem("Atividades", ImagesManager.getActivityIcon(), "activity");
+
 		SideBar sideBar = new SideBar(300, 720);
 		sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
-				.setHeader("Educator's Report", "Versão 1.0", ImagesManager.getLogo());
+				.setHeader("Educator's Report", "Versão 1.0", ImagesManager.getLogo())
+				.setNavigation(navigation);
 
 		this.add(sideBar.getComponent(), BorderLayout.LINE_START);
 	}

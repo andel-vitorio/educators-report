@@ -1,11 +1,16 @@
 package app.frontend.components;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import app.frontend.components.Button.ButtonInfo;
+import app.frontend.components.Button.ButtonType;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
+import res.img.ImagesManager;
 import res.values.*;
 import utils.ComponentDecorator;
 
@@ -33,18 +38,18 @@ public class SideBar {
 	public SideBar setHeader(String title, String subtitle, ImageIcon icon) {
 		JPanel container = new JPanel();
 		JPanel header = new JPanel();
-		JLabel titleLabel = new JLabel(title);	
+		JLabel titleLabel = new JLabel(title);
 		JLabel subtitleLabel = new JLabel(subtitle);
 		JLabel iconLabel = new JLabel(icon);
 
-		if ( !FontsManager.getLoadError() ) {
+		if (!FontsManager.getLoadError()) {
 			titleLabel.setFont(FontsManager.getFont(FontType.SEMI_BOLD, DimensManager.getTitleSize()));
 			subtitleLabel.setFont(FontsManager.getFont(FontType.MEDIUM, DimensManager.getSubtitleSize()));
 		}
 
 		container.setLayout(new FlowLayout(FlowLayout.LEFT, 24, 24));
 		container.setOpaque(false);
-		container.setPreferredSize(new Dimension(widthOfSideBar, 120));
+		container.setPreferredSize(new Dimension(widthOfSideBar, 64));
 		container.setMaximumSize(container.getPreferredSize());
 
 		header.setLayout(new BoxLayout(header, BoxLayout.PAGE_AXIS));
@@ -59,6 +64,10 @@ public class SideBar {
 		return this;
 	}
 
+	public SideBar setNavigation(Navigation navigation) {
+		component.add(navigation);
+		return this;
+	}
 
 	public JPanel getComponent() {
 		return component;
