@@ -1,18 +1,58 @@
 package utils;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import java.awt.geom.RoundRectangle2D;
 
 import res.values.ColorsManager;
 
 public class ComponentDecorator {
-	
+
+	public static class RoundedBorder implements Border {
+
+		private int radius;
+
+
+		public RoundedBorder(int radius) {
+				this.radius = radius;
+		}
+
+
+		@Override
+		public Insets getBorderInsets(Component c) {
+				return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
+		}
+
+
+		@Override
+		public boolean isBorderOpaque() {
+				return true;
+		}
+
+
+		@Override
+		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+				g.drawRoundRect(x, y, width-1, height-1, radius, radius);
+				c.repaint();
+		}
+
+}
+
 	public static void addBorderRight(JComponent component, int widht) {
 		MatteBorder border = BorderFactory.createMatteBorder(0, 0, 0, widht, ColorsManager.getBorderColor());
 		component.setBorder(border);
@@ -42,7 +82,12 @@ public class ComponentDecorator {
 		EmptyBorder border = new EmptyBorder(vertical, horizontal, vertical, horizontal);
 		component.setBorder(border);
 	}
-	
+
+	public static void addPadding(JComponent component, int width) {
+		EmptyBorder border = new EmptyBorder(width, width, width, width);
+		component.setBorder(border);
+	}
+
 	public static void addBorder(JComponent component, int widht) {
 		Border border = BorderFactory.createLineBorder(ColorsManager.getBorderColor(), widht);
 		component.setBorder(border);

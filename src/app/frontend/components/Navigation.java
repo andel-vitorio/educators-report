@@ -58,14 +58,13 @@ public class Navigation extends JPanel implements ActionListener {
 		Button button = new Button(ButtonType.BASIC, label, ColorsManager.getOnBackgroundColor());
 		button.setHorizontalAlignment(SwingConstants.LEFT);
 		button.setIcon(icon);
-		button.setIconTextGap(DimensManager.getIconTextGap());
 		button.setMinimumSize(new Dimension(widht, 48));
 
-		if ( !FontsManager.getLoadError() )	button.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontSize()));
+		if ( !FontsManager.getLoadError() )	button.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
 
 		if (qButton == 0) {
 			// button.setBackground(Color.BLUE);
-			if ( !FontsManager.getLoadError() )	button.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontSize())));
+			if ( !FontsManager.getLoadError() )	button.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
 			activedButton = button;
 		}
 
@@ -84,10 +83,10 @@ public class Navigation extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontSize()));
+		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
 		activedButton = (JButton) e.getSource();
 		System.out.println(activedButton.getActionCommand());
-		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontSize())));
+		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
 	}
 
 	private GridBagConstraints getButtonContrainst(int fill, double weightx, int gridwidth, int gridx, int gridy) {

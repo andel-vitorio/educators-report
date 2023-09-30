@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import app.frontend.components.*;
 import app.frontend.components.Button.ButtonInfo;
+import app.frontend.screens.TeachersManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import res.img.ImagesManager;
 import res.values.*;
 
 public class App extends JFrame {
+
+	private static final String TEACHER_WINDOWS_ID = "teacher-windows";
 
 	public App() throws IOException {
 		super("Educator's Report");
@@ -44,12 +47,17 @@ public class App extends JFrame {
 		navigation.setItem("Artigos", ImagesManager.getPaperIcon(), "paper");
 		navigation.setItem("Atividades", ImagesManager.getActivityIcon(), "activity");
 
-		SideBar sideBar = new SideBar(300, 720);
+		JPanel windows = new JPanel();
+		windows.setLayout(new CardLayout());
+		windows.add(new TeachersManager(), TEACHER_WINDOWS_ID);
+
+		SideBar sideBar = new SideBar(260, 720);
 		sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
 				.setHeader("Educator's Report", "Versão 1.0", ImagesManager.getLogo())
 				.setNavigation(navigation);
 
-		this.add(sideBar.getComponent(), BorderLayout.LINE_START);
+		add(sideBar.getComponent(), BorderLayout.LINE_START);
+		add(windows, BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) throws IOException {
