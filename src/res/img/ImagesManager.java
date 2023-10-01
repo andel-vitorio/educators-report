@@ -11,7 +11,10 @@ public class ImagesManager {
 	public static ImageIcon PAPERS_ICON;
 	public static ImageIcon ACTIVITIES_ICON;
 
-	public static ImageIcon ADD_ICON;
+	public static ImageIcon ADD_ICON;	
+	public static ImageIcon INFO_ICON;
+	public static ImageIcon EDIT_ICON;	
+	public static ImageIcon DELETE_ICON;
 
 	public static void load() {
 		String path = ImagesManager.class.getResource("/res/img").getFile();
@@ -21,7 +24,10 @@ public class ImagesManager {
 		STUDENTS_ICON = new ImageIcon(path + "/student-icon.png");
 		PAPERS_ICON = new ImageIcon(path + "/paper-icon.png");
 		ACTIVITIES_ICON = new ImageIcon(path + "/book.png");
-		ADD_ICON = new ImageIcon(path + "/add-icon-light.png");
+		ADD_ICON = new ImageIcon(path + "/add-icon-light.png");		
+		INFO_ICON = new ImageIcon(path + "/info.png");
+		EDIT_ICON = new ImageIcon(path + "/edit.png");
+		DELETE_ICON = new ImageIcon(path + "/delete.png");
 	}
 
 	public static ImageIcon getLogo() {
@@ -49,6 +55,18 @@ public class ImagesManager {
 
 	public static ImageIcon getAddIcon() {
 		return ADD_ICON;
+	}
+
+	public static ImageIcon getInfoIcon() {
+		return INFO_ICON;
+	}
+
+	public static ImageIcon getEditIcon() {
+		return EDIT_ICON;
+	}
+
+	public static ImageIcon getDeleteIcon() {
+		return DELETE_ICON;
 	}
 	
 }
