@@ -17,7 +17,8 @@ import app.frontend.components.Button.ButtonInfo;
 import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.TeacherTableModel;
-import app.frontend.screens.teachers.forms.AddTeacherForm;
+import app.frontend.screens.teachers.forms.TeacherForm;
+import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
@@ -30,6 +31,7 @@ public class TeachersManager extends JPanel {
 	private TopBar topBar;
 	private Table table;
 	private TeacherTableModel teacherTableModel;
+	private int lastSelectedRow = 0;
 
 	public TeachersManager() {
 		this.setLayout(new BorderLayout(0, 0));
@@ -41,7 +43,7 @@ public class TeachersManager extends JPanel {
 		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AddTeacherForm(teacherTableModel);
+				new TeacherForm(teacherTableModel, ActionType.ADD_TEACHER);
 			}
 		});
 
@@ -117,7 +119,14 @@ public class TeachersManager extends JPanel {
 	}
 
 	private void editTeacher() {
-		System.out.println("Edit Teacher");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
+		else lastSelectedRow = selectedRow; 
+		
+		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
+
+		new TeacherForm(teacherTableModel, ActionType.EDIT_TEACHER, teacher);
 	}
 
 	private void showTeacherInfo() {
