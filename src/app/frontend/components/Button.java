@@ -112,8 +112,7 @@ public class Button extends JButton {
 			case FILLED: {
 				setBorderPainted(true);
 				setFocusPainted(false);
-				setOpaque(false);
-				setBackground(ColorsManager.getButtonBackground());
+				setBackground(ColorsManager.getButtonBackgroundPrimary());
 				setForeground(ColorsManager.getTextColorLight());
 				setFont(FontsManager.getFont(FontType.MEDIUM, DimensManager.getButtonFontsizeSmall()));
 				ComponentDecorator.addPadding(this, 16);

@@ -1,4 +1,4 @@
-package app.frontend.screens;
+package app.frontend.screens.teachers;
 
 import javax.swing.JPanel;
 
@@ -17,6 +17,7 @@ import app.frontend.components.Button.ButtonInfo;
 import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.TeacherTableModel;
+import app.frontend.screens.teachers.forms.AddTeacherForm;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
@@ -40,7 +41,7 @@ public class TeachersManager extends JPanel {
 		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Adionar professor");
+				new AddTeacherForm(teacherTableModel);
 			}
 		});
 

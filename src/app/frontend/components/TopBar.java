@@ -26,7 +26,6 @@ public class TopBar extends JPanel {
 		titleLabel = new JLabel(title);
 
 		if ( !FontsManager.getLoadError() ) titleLabel.setFont(FontsManager.getFont(FontType.SEMI_BOLD, 16));
-		// this.titleLabel.setFont(FontsManager.medium20());
 
 		add(titleLabel, BorderLayout.LINE_START);
 	}
@@ -46,7 +45,7 @@ public class TopBar extends JPanel {
 
 					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
 
-					g2d.setColor(ColorsManager.getButtonBackground());
+					g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
 					g2d.fill(roundedRectangle);
 			}
 		};
