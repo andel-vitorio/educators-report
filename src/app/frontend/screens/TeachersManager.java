@@ -1,21 +1,12 @@
 package app.frontend.screens;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
-import java.sql.Date;
-import java.time.chrono.JapaneseEra;
+
 import java.util.ArrayList;
 
 import app.backend.entities.Teacher;
@@ -23,7 +14,6 @@ import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
 import app.frontend.components.Button.ButtonInfo;
-import app.frontend.components.Table.CellContentAlignment;
 import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.TeacherTableModel;
@@ -123,10 +113,6 @@ public class TeachersManager extends JPanel {
 
 		teacherTableModel.setTeachersList(teachers);
 		teacherTableModel.updateTable();
-	}
-
-	private void addTeacher() {
-
 	}
 
 	private void editTeacher() {

@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import app.frontend.components.Button.ButtonType;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
-import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
 

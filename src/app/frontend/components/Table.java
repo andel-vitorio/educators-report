@@ -1,13 +1,8 @@
 package app.frontend.components;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.plaf.basic.BasicTableUI;
 
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.EventObject;
 
 import javax.swing.table.AbstractTableModel;
