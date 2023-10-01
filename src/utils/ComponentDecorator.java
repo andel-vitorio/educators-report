@@ -58,6 +58,16 @@ public class ComponentDecorator {
 		component.setBorder(border);
 	}
 
+	public static void addBorderBottom(JComponent component, int widht) {
+		MatteBorder border = BorderFactory.createMatteBorder(0, 0, widht, 0, ColorsManager.getBorderColor());
+		component.setBorder(BorderFactory.createCompoundBorder(border, component.getBorder()));
+	}
+
+	public static void addBorderBottom(JComponent component, int widht, Color color) {
+		MatteBorder border = BorderFactory.createMatteBorder(0, 0, widht, 0, color);
+		component.setBorder(BorderFactory.createCompoundBorder(border, component.getBorder()));
+	}
+
 	public static void addBorder(JComponent component, int top, int right, int bottom, int left) {
 		MatteBorder border = BorderFactory.createMatteBorder(top, left, bottom, right, ColorsManager.getBorderColor());
 		component.setBorder(border);
@@ -65,7 +75,7 @@ public class ComponentDecorator {
 
 	public static void addPadding(JComponent component, int top, int right, int bottom, int left) {
 		EmptyBorder border = new EmptyBorder(top, left, bottom, right);
-		component.setBorder(border);
+		component.setBorder(BorderFactory.createCompoundBorder(component.getBorder(), border));
 	}
 
 	public static void addPaddingHorizontal(JComponent component, int widht) {
@@ -80,7 +90,7 @@ public class ComponentDecorator {
 
 	public static void addPadding(JComponent component, int vertical, int horizontal) {
 		EmptyBorder border = new EmptyBorder(vertical, horizontal, vertical, horizontal);
-		component.setBorder(border);
+		component.setBorder(BorderFactory.createCompoundBorder(border, component.getBorder()));
 	}
 
 	public static void addPadding(JComponent component, int width) {
