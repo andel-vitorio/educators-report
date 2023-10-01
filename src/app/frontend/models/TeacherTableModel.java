@@ -8,6 +8,8 @@ import app.backend.entities.Teacher;
 
 public class TeacherTableModel extends AbstractTableModel {
     private ArrayList<Teacher> teachers = new ArrayList<>();
+
+		public static final int ACTIONS_BUTTON_COLUMN_INDEX = 2;
     
     public void setTeachersList(ArrayList<Teacher> costumer) {
         this.teachers.clear();
@@ -37,7 +39,6 @@ public class TeacherTableModel extends AbstractTableModel {
         switch (columnIndex) {
             case 0: return teacher.getIndenticatorNumber();
             case 1: return teacher.getName();
-            case 2: return "Editar";
             default: return null;
         }
     }
@@ -61,7 +62,7 @@ public class TeacherTableModel extends AbstractTableModel {
     }
 
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			if (columnIndex == 2) return true;
+			if (columnIndex == ACTIONS_BUTTON_COLUMN_INDEX) return true;
 			else return false;
 		}
 
