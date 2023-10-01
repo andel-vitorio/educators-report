@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
-import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

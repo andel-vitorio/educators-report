@@ -7,9 +7,13 @@ public class DimensManager {
 	
 	private static final int BUTTON_FONTSIZE_MEDIUM = 16;
 	private static final int BUTTON_FONTSIZE_SMALL = 12;
+	private static final int ROW_HEIGHT = 40;
 
-		
-
+	private static final int TABLE_HEADER_TEXTSIZE = 12;
+	private static final int TABLE_ITEM_TEXTSIZE = 12;
+	
+	private static final int TITLE_FORMS_FONTSIZE = 18;	
+	private static final int SECTION_LABEL_FONTSIZE = 14;
 
 	public static int getTitleSize() {
 		return TITLE_SIZE;
@@ -29,5 +33,25 @@ public class DimensManager {
 
 	public static int getButtonFontsizeSmall() {
 		return BUTTON_FONTSIZE_SMALL;
+	}
+
+	public static int getTableHeaderTextsize() {
+		return TABLE_HEADER_TEXTSIZE;
+	}
+
+	public static int getTableItemTextsize() {
+		return TABLE_ITEM_TEXTSIZE;
+	}
+
+	public static int getRowHeight() {
+		return ROW_HEIGHT;
+	}
+
+	public static int getTitleFormsFontsize() {
+		return TITLE_FORMS_FONTSIZE;
+	}
+
+	public static int getSectionLabelFontsize() {
+		return SECTION_LABEL_FONTSIZE;
 	}
 }

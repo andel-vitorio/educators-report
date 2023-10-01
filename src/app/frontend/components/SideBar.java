@@ -1,27 +1,21 @@
 package app.frontend.components;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
-import app.frontend.components.Button.ButtonInfo;
-import app.frontend.components.Button.ButtonType;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
-import res.img.ImagesManager;
 import res.values.*;
 import utils.ComponentDecorator;
 
 public class SideBar {
 
 	private JPanel component = new JPanel();
-	private int widthOfSideBar, heightOfSideBar;
+	private int widthOfSideBar;
 
 	public SideBar(int width, int height) {
 		this.widthOfSideBar = width;
-		this.heightOfSideBar = height;
 
 		component.setSize(width, height);
 		component.setPreferredSize(new Dimension(width, height));

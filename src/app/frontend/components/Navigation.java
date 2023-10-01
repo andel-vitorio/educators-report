@@ -1,22 +1,17 @@
 package app.frontend.components;
 
-import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import app.frontend.components.Button.ButtonType;
 import res.fonts.FontsManager;
@@ -26,7 +21,6 @@ import res.values.DimensManager;
 import utils.ComponentDecorator;
 
 public class Navigation extends JPanel implements ActionListener {
-	private final ArrayList<JButton> buttons = new ArrayList<>();
 	private JButton activedButton;
 	private int qButton;
 	int widht;
@@ -97,26 +91,5 @@ public class Navigation extends JPanel implements ActionListener {
 		gbc.gridx = gridx;
 		gbc.gridy = gridy;
 		return gbc;
-	}
-
-	private JButton createButton(String label, Color background) {
-		JButton button = new JButton(label);
-		button.setOpaque(true);
-		button.setBorderPainted(false);
-		button.setFocusPainted(false);
-		button.setBackground(background);
-
-		button.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		button.setHorizontalAlignment(SwingConstants.LEFT);
-		button.setHorizontalTextPosition(SwingConstants.LEFT);
-
-		button.setBorder(BorderFactory.createEmptyBorder(16, 48, 16, 8));
-
-		if (background == null)
-			button.setContentAreaFilled(false);
-		else
-			button.setBackground(background);
-
-		return button;
 	}
 }

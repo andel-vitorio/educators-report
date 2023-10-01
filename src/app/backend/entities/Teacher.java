@@ -1,17 +1,19 @@
 package app.backend.entities;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Teacher {
 	private String name;
-	private Date birthDay;
-	private int indenticatorNumber;
+
+	private LocalDate birthDay;
+	private String indenticatorNumber;
+
 	private String email;
 	private String phone;
 	private String trainingArea;
 	private int yearsOfExperience;
 
-	public void setBirthDay(Date birthDay) {
+	public void setBirthDay(LocalDate birthDay) {
 		this.birthDay = birthDay;
 	}
 
@@ -19,7 +21,7 @@ public class Teacher {
 		this.email = email;
 	}
 
-	public void setIndenticatorNumber(int indenticatorNumber) {
+	public void setIndenticatorNumber(String indenticatorNumber) {
 		this.indenticatorNumber = indenticatorNumber;
 	}
 
@@ -39,7 +41,7 @@ public class Teacher {
 		this.yearsOfExperience = yearsOfExperience;
 	}
 
-	public Date getBirthDay() {
+	public LocalDate getBirthDay() {
 		return birthDay;
 	}
 
@@ -47,7 +49,7 @@ public class Teacher {
 		return email;
 	}
 
-	public int getIndenticatorNumber() {
+	public String getIndenticatorNumber() {
 		return indenticatorNumber;
 	}
 
@@ -65,5 +67,18 @@ public class Teacher {
 
 	public int getYearsOfExperience() {
 		return yearsOfExperience;
+	}
+
+	@Override
+	public String toString() {
+		return "Teacher{" +
+				"name='" + name + '\'' +
+				", birthDay=" + birthDay +
+				", indenticatorNumber='" + indenticatorNumber + '\'' +
+				", email='" + email + '\'' +
+				", phone='" + phone + '\'' +
+				", trainingArea='" + trainingArea + '\'' +
+				", yearsOfExperience=" + yearsOfExperience +
+				'}';
 	}
 }
