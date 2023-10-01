@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
+import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,12 +24,18 @@ public class Button extends JButton {
 	public static class ButtonInfo {
 		private String label;
 		private ImageIcon icon;
+		ActionListener actionListener;
 
 		public ButtonInfo() {}
 
 		public ButtonInfo(String label, ImageIcon icon) {
 			this.label = label;
 			this.icon = icon;
+		}
+
+		public ButtonInfo(String label, ImageIcon icon, ActionListener action) {
+			this(label, icon);
+			this.actionListener = action;
 		}
 
 		public void setIcon(ImageIcon icon) {
@@ -38,12 +46,20 @@ public class Button extends JButton {
 			this.label = label;
 		}
 
+		public void setActionListener(ActionListener actionListener) {
+			this.actionListener = actionListener;
+		}
+
 		public ImageIcon getIcon() {
 			return icon;
 		}
 
 		public String getLabel() {
 			return label;
+		}
+
+		public ActionListener getActionListener() {
+			return actionListener;
 		}
 	}
 
