@@ -22,7 +22,7 @@ public class TopBar extends JPanel {
 
 	public TopBar(String title) {
 		setLayout(new BorderLayout());
-		ComponentDecorator.addPadding(this, 16, 24);
+		ComponentDecorator.addPadding(this, 12, 24);
 
 		titleLabel = new JLabel(title);
 
@@ -45,7 +45,7 @@ public class TopBar extends JPanel {
 
 					setBackground(ColorsManager.getOnBackgroundColor());
 
-					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 16, 16);
+					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
 
 					g2d.setColor(ColorsManager.getButtonBackground());
 					g2d.fill(roundedRectangle);
@@ -56,7 +56,8 @@ public class TopBar extends JPanel {
 		button.setIcon(icon);
 		button.addActionListener(listener);
 		button.setForeground(ColorsManager.getTextColorLight());
-		ComponentDecorator.addPadding(button, 12);
+		button.setBorder(null);
+		ComponentDecorator.addPadding(button, 12, 16);
 
 		container.setLayout(new BorderLayout());
 		container.add(button, BorderLayout.CENTER);
