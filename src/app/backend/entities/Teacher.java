@@ -1,17 +1,17 @@
 package app.backend.entities;
 
-import java.sql.Date;
+import java.time.*;
 
 public class Teacher {
 	private String name;
-	private Date birthDay;
+	private LocalDate birthDay;
 	private int indenticatorNumber;
 	private String email;
 	private String phone;
 	private String trainingArea;
 	private int yearsOfExperience;
 
-	public void setBirthDay(Date birthDay) {
+	public void setBirthDay(LocalDate birthDay) {
 		this.birthDay = birthDay;
 	}
 
@@ -39,7 +39,7 @@ public class Teacher {
 		this.yearsOfExperience = yearsOfExperience;
 	}
 
-	public Date getBirthDay() {
+	public LocalDate getBirthDay() {
 		return birthDay;
 	}
 
