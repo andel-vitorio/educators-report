@@ -34,6 +34,10 @@ public class FormField extends JPanel {
         add(this.formInput, BorderLayout.CENTER);
     }
 
+		public void setEditable(boolean isEditable) {
+			formInput.setEditable(isEditable);
+		}
+
     public void setWidthLabel(int width) {
         this.formLabel.setPreferredSize(new Dimension(width, 0));
     }
