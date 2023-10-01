@@ -144,4 +144,11 @@ public class DatePicker extends JPanel {
 		int year = (int) yearComboBox.getSelectedItem();
 		return LocalDate.of(year, month, day);
 	}
+
+	public void setDate(LocalDate localDate) {
+		daysComboBox.setSelectedItem(localDate.getDayOfMonth());		
+		monthComboBox.setSelectedItem(localDate.getMonthValue());
+		yearComboBox.setSelectedItem(localDate.getYear());
+
+	}
 }
