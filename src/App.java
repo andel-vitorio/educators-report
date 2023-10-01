@@ -2,11 +2,9 @@
 import javax.swing.*;
 
 import app.frontend.components.*;
-import app.frontend.components.Button.ButtonInfo;
-import app.frontend.screens.TeachersManager;
+import app.frontend.screens.teachers.TeachersManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.awt.*;
 
 import res.fonts.FontsManager;
