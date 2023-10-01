@@ -130,7 +130,14 @@ public class TeachersManager extends JPanel {
 	}
 
 	private void showTeacherInfo() {
-		System.out.println("Info Teacher");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
+		else lastSelectedRow = selectedRow; 
+
+		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
+		
+		new TeacherForm(teacherTableModel, ActionType.INFO_TEACHER, teacher);
 	}
 
 	private void deleteTeacher() {

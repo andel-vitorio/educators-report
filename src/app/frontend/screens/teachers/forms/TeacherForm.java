@@ -46,16 +46,25 @@ public class TeacherForm extends JFrame {
 	private FormField emailFormField;
 	private FormField phoneNumberFormField;
 	private FormField trainingAreaFormField;
+	private boolean isEditable = true;
 
-	public enum ActionType { EDIT_TEACHER, ADD_TEACHER }
+	public enum ActionType {
+		EDIT_TEACHER, ADD_TEACHER, INFO_TEACHER
+	}
 
 	public TeacherForm(TeacherTableModel teacherTableModel, ActionType actionType) {
 		super("");
-		
+
 		String title;
 
-		if ( actionType == ActionType.EDIT_TEACHER ) title = "Editar Informações";
-		else title = "Cadastrar Professor";
+		if (actionType == ActionType.EDIT_TEACHER)
+			title = "Editar Informações";
+		else if (actionType == ActionType.ADD_TEACHER)
+			title = "Cadastrar Professor";
+		else {
+			title = "Dados do Professor";
+			isEditable = false;
+		}
 
 		setTitle(title);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -98,7 +107,7 @@ public class TeacherForm extends JFrame {
 		int y = 0;
 
 		GridBagConstraints constraints = new GridBagConstraints();
-		
+
 		// Seção: Informações Pessoais
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.PAGE_START;
@@ -111,6 +120,7 @@ public class TeacherForm extends JFrame {
 		constraints.insets = new Insets(0, 0, 16, 0);
 		constraints.gridy = y++;
 		nameFormField = new FormField("Nome Completo", 504);
+		nameFormField.setEditable(isEditable);
 		formContainer.add(nameFormField, constraints);
 
 		constraints.gridwidth = 1;
@@ -118,6 +128,7 @@ public class TeacherForm extends JFrame {
 		constraints.gridy = y;
 		constraints.insets = new Insets(0, 0, 16, 12);
 		birthDayDatePicker = new DatePicker("Data de Nascimento", 0);
+		birthDayDatePicker.setEditable(isEditable);
 		formContainer.add(birthDayDatePicker, constraints);
 
 		constraints.insets = new Insets(0, 12, 16, 0);
@@ -125,6 +136,7 @@ public class TeacherForm extends JFrame {
 		constraints.gridx = 1;
 		constraints.gridy = y++;
 		indetificationFormField = new FormField("Identificação", 0);
+		indetificationFormField.setEditable(isEditable);
 		formContainer.add(indetificationFormField, constraints);
 
 		// Seção: Informações de Contato
@@ -138,13 +150,15 @@ public class TeacherForm extends JFrame {
 		constraints.insets = new Insets(0, 0, 16, 0);
 		constraints.gridy = y++;
 		emailFormField = new FormField("E-mail", 504);
+		emailFormField.setEditable(isEditable);
 		formContainer.add(emailFormField, constraints);
 
 		constraints.insets = new Insets(0, 0, 16, 0);
 		constraints.gridy = y++;
 		phoneNumberFormField = new FormField("Número de telefone", 504);
+		phoneNumberFormField.setEditable(isEditable);
 		formContainer.add(phoneNumberFormField, constraints);
-		
+
 		// Seção Informações Profissionais
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridy = y++;
@@ -155,6 +169,7 @@ public class TeacherForm extends JFrame {
 		constraints.gridy = y;
 		constraints.insets = new Insets(0, 0, 0, 12);
 		trainingAreaFormField = new FormField("Área de Formação", 0);
+		trainingAreaFormField.setEditable(isEditable);
 		formContainer.add(trainingAreaFormField, constraints);
 
 		constraints.insets = new Insets(0, 12, 0, 0);
@@ -162,6 +177,7 @@ public class TeacherForm extends JFrame {
 		constraints.gridx = 1;
 		constraints.gridy = y++;
 		yearsOfExperienceFormField = new FormField("Anos de Experiência", 0);
+		yearsOfExperienceFormField.setEditable(isEditable);
 		formContainer.add(yearsOfExperienceFormField, constraints);
 
 		GridBagConstraints fillerConstraints = new GridBagConstraints();
@@ -179,7 +195,7 @@ public class TeacherForm extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.getViewport().setBackground(ColorsManager.getOnBackgroundColor());
 		scrollPane.setBorder(null);
-		
+
 		return scrollPane;
 	}
 
@@ -195,7 +211,38 @@ public class TeacherForm extends JFrame {
 		JPanel buttonsContainer = new JPanel();
 		buttonsContainer.setLayout(new FlowLayout(FlowLayout.RIGHT, 24, 0));
 		buttonsContainer.setOpaque(false);
-		// buttonsContainer.setBorder(new EmptyBorder(24, 0, 24, 0));
+
+		if ( isEditable ) {
+			JPanel cancelButtonContainer = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+					super.paintComponent(g);
+					Graphics2D g2d = (Graphics2D) g;
+
+					int width = getWidth();
+					int height = getHeight();
+
+					setBackground(ColorsManager.getOnBackgroundColor());
+
+					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+
+					g2d.setColor(ColorsManager.getButtonBackgroundSecondary());
+					g2d.fill(roundedRectangle);
+				}
+			};
+
+			Button cancelButton = new Button(ButtonType.BASIC, "CANCELAR");
+			cancelButton.setForeground(ColorsManager.getTextColorDark());
+			cancelButton.setBorder(null);
+			ComponentDecorator.addPadding(cancelButton, 6, 16);
+
+			cancelButtonContainer.add(cancelButton);
+			cancelButtonContainer.setBorder(null);
+
+			cancelButton.addActionListener(event -> dispose());
+			buttonsContainer.add(cancelButtonContainer);
+		}
+
 
 		JPanel confirmButtonContainer = new JPanel() {
 			@Override
@@ -223,36 +270,9 @@ public class TeacherForm extends JFrame {
 		confirmButtonContainer.add(confirmButton);
 		confirmButtonContainer.setBorder(null);
 
-		JPanel cancelButtonContainer = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					Graphics2D g2d = (Graphics2D) g;
-
-					int width = getWidth();
-					int height = getHeight();
-
-					setBackground(ColorsManager.getOnBackgroundColor());
-
-					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
-
-					g2d.setColor(ColorsManager.getButtonBackgroundSecondary());
-					g2d.fill(roundedRectangle);
-			}
-		};
-
-		Button cancelButton = new Button(ButtonType.BASIC, "CANCELAR");
-		cancelButton.setForeground(ColorsManager.getTextColorDark());
-		cancelButton.setBorder(null);
-		ComponentDecorator.addPadding(cancelButton, 6, 16);
-
-		cancelButtonContainer.add(cancelButton);
-		cancelButtonContainer.setBorder(null);
-
-		cancelButton.addActionListener(event -> dispose());
 		confirmButton.addActionListener(event -> confirm());
 
-		buttonsContainer.add(cancelButtonContainer);
+		
 		buttonsContainer.add(confirmButtonContainer);
 
 		ComponentDecorator.addPadding(buttonsContainer, 24,0);
@@ -261,18 +281,20 @@ public class TeacherForm extends JFrame {
 	}
 
 	private void confirm() {
-		Teacher teacher = new Teacher();
-		teacher.setBirthDay(birthDayDatePicker.getDate());
-		teacher.setEmail(emailFormField.getText());
-		teacher.setIndenticatorNumber(indetificationFormField.getText());
-		teacher.setName(nameFormField.getText());
-		teacher.setPhone(phoneNumberFormField.getText());
-		teacher.setTrainingArea(trainingAreaFormField.getText());
-		teacher.setYearsOfExperience(Integer.parseInt(yearsOfExperienceFormField.getText()));
-		
-		System.out.println("Confirm Button Pressed");
-		System.out.println(teacher);
 
+		if ( isEditable ) {
+			Teacher teacher = new Teacher();
+			teacher.setBirthDay(birthDayDatePicker.getDate());
+			teacher.setEmail(emailFormField.getText());
+			teacher.setIndenticatorNumber(indetificationFormField.getText());
+			teacher.setName(nameFormField.getText());
+			teacher.setPhone(phoneNumberFormField.getText());
+			teacher.setTrainingArea(trainingAreaFormField.getText());
+			teacher.setYearsOfExperience(Integer.parseInt(yearsOfExperienceFormField.getText()));
+	
+			System.out.println(teacher);
+		}
+		
 		dispose();
 	}
 }
