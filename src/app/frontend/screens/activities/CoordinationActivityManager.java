@@ -17,6 +17,8 @@ import app.frontend.components.Button.ButtonInfo;
 import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.CoordinationActivityTableModel;
+import app.frontend.screens.activities.form.CoordinationActivityForm;
+import app.frontend.screens.activities.form.CoordinationActivityForm.CoordinationActivityActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
@@ -41,8 +43,8 @@ public class CoordinationActivityManager extends JPanel {
 		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// new CoordinationActivityForm(coordinationActivityTableModel,
-				// CoordinationActivityActionType.ADD_PAPER);
+				new CoordinationActivityForm(coordinationActivityTableModel,
+						CoordinationActivityActionType.ADD_ACTIVITY);
 			}
 		});
 
@@ -128,6 +130,8 @@ public class CoordinationActivityManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
+		new CoordinationActivityForm(coordinationActivityTableModel,
+						CoordinationActivityActionType.EDIT_ACTIVITY, activity);
 	}
 
 	private void showSubjectInfo() {
@@ -139,6 +143,8 @@ public class CoordinationActivityManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
+		new CoordinationActivityForm(coordinationActivityTableModel,
+						CoordinationActivityActionType.EDIT_ACTIVITY, activity);
 	}
 
 	private void deleteSubject() {
