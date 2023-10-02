@@ -38,9 +38,11 @@ public class FormField extends JPanel {
 
     private void initializeInputComponent() {
         if (multiline) {
-            JTextArea textArea = new JTextArea();
+            RoundedTextArea textArea = new RoundedTextArea();
             textArea.setWrapStyleWord(true);
             textArea.setLineWrap(true);
+						textArea.setFont(FontsManager.getFont(FontType.MEDIUM, 12));
+            ComponentDecorator.addPadding(textArea, 12);
             this.formInput = textArea;
         } else {
             RoundedTextField textField = new RoundedTextField();
