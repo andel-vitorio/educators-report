@@ -20,6 +20,8 @@ import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.PapersTableModel;
 import app.frontend.models.TeacherTableModel;
+import app.frontend.screens.papers.forms.PaperForm;
+import app.frontend.screens.papers.forms.PaperForm.PaperActionType;
 import app.frontend.screens.subjects.forms.SubjectForm;
 import app.frontend.screens.subjects.forms.SubjectForm.ActionType;
 import res.img.ImagesManager;
@@ -46,7 +48,7 @@ public class PapersManager extends JPanel {
 		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// add paper form here
+				new PaperForm(papersTableModel, PaperActionType.ADD_PAPER);
 			}
 		});
 
@@ -131,7 +133,7 @@ public class PapersManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		Paper paper = papersTableModel.getPaperAt(selectedRow);
-		// add paper form here
+		new PaperForm(papersTableModel, PaperActionType.EDIT_PAPER, paper);
 	}
 
 	private void showSubjectInfo() {
@@ -143,7 +145,7 @@ public class PapersManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		Paper paper = papersTableModel.getPaperAt(selectedRow);
-		// add paper form here
+		new PaperForm(papersTableModel, PaperActionType.INFO_PAPER, paper);
 	}
 
 	private void deleteSubject() {
