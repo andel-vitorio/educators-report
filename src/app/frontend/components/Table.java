@@ -94,8 +94,8 @@ public class Table extends JPanel {
 		ComponentDecorator.addBorderBottom(tableHeader, 1, Color.BLACK);
 
 		if (!FontsManager.getLoadError()) {
-			tableHeader.setFont(FontsManager.getFont(FontType.MEDIUM, DimensManager.getTableHeaderTextsize()));
-			table.setFont(FontsManager.getFont(FontType.MEDIUM, DimensManager.getTableItemTextsize()));
+			tableHeader.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getTableHeaderTextsize()));
+			table.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getTableItemTextsize()));
 		}
 
 		ComponentDecorator.addPadding(table, 10);

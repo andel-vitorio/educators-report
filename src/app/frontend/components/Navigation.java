@@ -19,11 +19,14 @@ import res.fonts.FontsManager.FontType;
 import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
+import utils.Observable;
 
 public class Navigation extends JPanel implements ActionListener {
 	private JButton activedButton;
 	private int qButton;
 	int widht;
+
+	private Observable observable;
 
 	public Navigation(int widht, int height, ActionListener actionListener) {
 		JLabel titleLabel = new JLabel("MENU");
@@ -45,6 +48,8 @@ public class Navigation extends JPanel implements ActionListener {
 		}
 
 		add(titleLabel, gbcTitleLabel);
+
+		observable = new Observable();
 	}
 
 	public void setItem(String label, ImageIcon icon, String tag) {
@@ -79,7 +84,7 @@ public class Navigation extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
 		activedButton = (JButton) e.getSource();
-		System.out.println(activedButton.getActionCommand());
+		observable.notifyObservers(e.getActionCommand());
 		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
 	}
 
@@ -91,5 +96,9 @@ public class Navigation extends JPanel implements ActionListener {
 		gbc.gridx = gridx;
 		gbc.gridy = gridy;
 		return gbc;
+	}
+
+	public Observable getObservable() {
+		return observable;
 	}
 }
