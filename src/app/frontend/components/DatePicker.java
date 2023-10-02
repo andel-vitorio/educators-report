@@ -154,10 +154,7 @@ public class DatePicker extends JPanel {
 
 	public void setEditable(boolean isEditable) {
 		daysComboBox.setEnabled(isEditable);
-		daysComboBox.setEditable(isEditable);
 		monthComboBox.setEnabled(isEditable);
-		monthComboBox.setEditable(isEditable);
 		yearComboBox.setEnabled(isEditable);
-		yearComboBox.setEditable(isEditable);
 	}
 }
