@@ -165,6 +165,7 @@ public class SubjectForm extends JFrame {
 		descriptionFormField = new FormField("Descrição", 504);
 		descriptionFormField.setHeight(100);
 		descriptionFormField.setEditable(isEditable);
+		descriptionFormField.isMultiline(true);
 		formContainer.add(descriptionFormField, constraints);
 
 		constraints.insets = new Insets(0, 0, 0, 0);
