@@ -15,6 +15,7 @@ import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
 import java.text.Normalizer.Form;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -40,7 +41,7 @@ import app.backend.entities.Subjects;
 import app.backend.entities.Teacher;
 import app.frontend.components.Button;
 import app.frontend.components.Button.ButtonType;
-import app.frontend.components.DatePicker;
+import app.frontend.components.TimePicker;
 import app.frontend.components.FormField;
 import app.frontend.models.SubjectTableModel;
 import app.frontend.models.TeacherTableModel;
@@ -58,14 +59,14 @@ public class SubjectForm extends JFrame {
 	private FormField codeFormField;
 	private FormField nameFormField;
 	private FormField descriptionFormField;
-	private DatePicker hourDatePicker;
+	private TimePicker startTimePicker;
+	private TimePicker endTimePicker;
 	private FormField classroomFormField;
 	private FormField teacherNameFormField;
 	private FormField requirementsFormField;
 	private FormField courseLoadFormField;
 	private FormField creditsFormField;
 	private FormField numberOfVacanciesFormField;
-
 
 	public enum ActionType {
 		EDIT_SUBJECT, ADD_SUBJECT, INFO_SUBJECT
@@ -110,7 +111,17 @@ public class SubjectForm extends JFrame {
 
 	public SubjectForm(SubjectTableModel subjectTableModel, ActionType actionType, Subjects subject) {
 		this(subjectTableModel, actionType);
-
+		codeFormField.setText(subject.getCode());
+		nameFormField.setText(subject.getName());
+		descriptionFormField.setText(subject.getDescription());
+		startTimePicker.setTime(subject.getStartTime());
+		endTimePicker.setTime(subject.getEndTime());
+		teacherNameFormField.setText(subject.getTeacherName());
+		requirementsFormField.setText(subject.getRequirements());
+		courseLoadFormField.setText(subject.getCourseLoad());
+		creditsFormField.setText(subject.getCredits());
+		numberOfVacanciesFormField.setText(subject.getNumberOfVacancies());
+		classroomFormField.setText(subject.getClassroom());
 	}
 
 	private JScrollPane getFormContainer() {
@@ -149,7 +160,7 @@ public class SubjectForm extends JFrame {
 		constraints.insets = new Insets(0, 0, 16, 0);
 		constraints.gridy = y++;
 		constraints.gridx = 0;
-		constraints.gridwidth = 3; 
+		constraints.gridwidth = 3;
 		constraints.fill = GridBagConstraints.BOTH;
 		descriptionFormField = new FormField("Descrição", 504);
 		descriptionFormField.setHeight(100);
@@ -162,16 +173,24 @@ public class SubjectForm extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = y++;
 
-
 		formContainer.add(getSectionLabel("Horário e Local"), constraints);
 
-		constraints.gridwidth = 2;
+		constraints.gridwidth = 1;
 		constraints.weightx = 0.5;
 		constraints.gridy = y;
 		constraints.insets = new Insets(0, 0, 16, 12);
-		hourDatePicker = new DatePicker("Horário", 0);
-		hourDatePicker.setEditable(isEditable);
-		formContainer.add(hourDatePicker, constraints);
+		startTimePicker = new TimePicker("Início", 0);
+		startTimePicker.setEditable(isEditable);
+		formContainer.add(startTimePicker, constraints);
+
+		constraints.gridwidth = 1;
+		constraints.weightx = 0.5;
+		constraints.gridx = 1;
+		constraints.gridy = y;
+		constraints.insets = new Insets(0, 0, 16, 12);
+		endTimePicker = new TimePicker("Fim", 0);
+		endTimePicker.setEditable(isEditable);
+		formContainer.add(endTimePicker, constraints);
 
 		constraints.insets = new Insets(0, 12, 16, 0);
 		constraints.gridwidth = 1;
@@ -187,17 +206,16 @@ public class SubjectForm extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = y++;
 
-
 		formContainer.add(getSectionLabel("Informações do Professor"), constraints);
 
 		constraints.insets = new Insets(0, 0, 16, 0);
 		constraints.gridy = y++;
 		constraints.gridx = 0;
-		constraints.gridwidth = 3; 
-		
-		descriptionFormField = new FormField("Nome do Professor", 504);
-		descriptionFormField.setEditable(isEditable);
-		formContainer.add(descriptionFormField, constraints);
+		constraints.gridwidth = 3;
+
+		teacherNameFormField = new FormField("Nome do Professor", 504);
+		teacherNameFormField.setEditable(isEditable);
+		formContainer.add(teacherNameFormField, constraints);
 
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridwidth = 3;
@@ -205,17 +223,16 @@ public class SubjectForm extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = y++;
 
-
 		formContainer.add(getSectionLabel("Outras Informações"), constraints);
 
 		constraints.insets = new Insets(0, 0, 16, 0);
 		constraints.gridy = y++;
 		constraints.gridx = 0;
-		constraints.gridwidth = 3; 
-		
-		descriptionFormField = new FormField("Pré-requisitos", 504);
-		descriptionFormField.setEditable(isEditable);
-		formContainer.add(descriptionFormField, constraints);
+		constraints.gridwidth = 3;
+
+		requirementsFormField = new FormField("Pré-requisitos", 504);
+		requirementsFormField.setEditable(isEditable);
+		formContainer.add(requirementsFormField, constraints);
 
 		constraints.gridwidth = 1;
 		constraints.weightx = 0.5;
@@ -240,7 +257,6 @@ public class SubjectForm extends JFrame {
 		numberOfVacanciesFormField = new FormField("Número de Vagas", 0);
 		numberOfVacanciesFormField.setEditable(isEditable);
 		formContainer.add(numberOfVacanciesFormField, constraints);
-
 
 		GridBagConstraints fillerConstraints = new GridBagConstraints();
 		fillerConstraints.fill = GridBagConstraints.BOTH;
@@ -275,10 +291,10 @@ public class SubjectForm extends JFrame {
 		buttonsContainer.setLayout(new FlowLayout(FlowLayout.RIGHT, 24, 0));
 		buttonsContainer.setOpaque(false);
 
-		if ( isEditable ) {
+		if (isEditable) {
 			JPanel cancelButtonContainer = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
+				@Override
+				protected void paintComponent(Graphics g) {
 					super.paintComponent(g);
 					Graphics2D g2d = (Graphics2D) g;
 
@@ -306,22 +322,21 @@ public class SubjectForm extends JFrame {
 			buttonsContainer.add(cancelButtonContainer);
 		}
 
-
 		JPanel confirmButtonContainer = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					Graphics2D g2d = (Graphics2D) g;
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g;
 
-					int width = getWidth();
-					int height = getHeight();
+				int width = getWidth();
+				int height = getHeight();
 
-					setBackground(ColorsManager.getOnBackgroundColor());
+				setBackground(ColorsManager.getOnBackgroundColor());
 
-					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+				RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
 
-					g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
-					g2d.fill(roundedRectangle);
+				g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
+				g2d.fill(roundedRectangle);
 			}
 		};
 
@@ -335,21 +350,46 @@ public class SubjectForm extends JFrame {
 
 		confirmButton.addActionListener(event -> confirm());
 
-		
 		buttonsContainer.add(confirmButtonContainer);
 
-		ComponentDecorator.addPadding(buttonsContainer, 24,0);
+		ComponentDecorator.addPadding(buttonsContainer, 24, 0);
 
 		return buttonsContainer;
 	}
 
-
 	private void confirm() {
 
-		if ( isEditable ) {
+		if (isEditable) {
+			String code = codeFormField.getText();
+			String name = nameFormField.getText();
+			String description = descriptionFormField.getText();
+			String teacherName = teacherNameFormField.getText();
+			String requirements = requirementsFormField.getText();
+			String classroom = classroomFormField.getText();
+
+			LocalTime startTime = startTimePicker.getTime();
+			LocalTime endTime = endTimePicker.getTime();
+
+			int courseLoad = Integer.parseInt(courseLoadFormField.getText());
+			int credits = Integer.parseInt(creditsFormField.getText());
+			int numberOfVacancies = Integer.parseInt(numberOfVacanciesFormField.getText());
+
 			Subjects subject = new Subjects();
+			subject.setCode(code);
+			subject.setName(name);
+			subject.setDescription(description);
+			subject.setStartTime(startTime);
+			subject.setEndTime(endTime);
+			subject.setTeacherName(teacherName);
+			subject.setRequirements(requirements);
+			subject.setCourseLoad(courseLoad);
+			subject.setCredits(credits);
+			subject.setNumberOfVacancies(numberOfVacancies);
+			subject.setClassroom(classroom);
+
+			System.out.println(subject);
 		}
-		
+
 		dispose();
 	}
 }
