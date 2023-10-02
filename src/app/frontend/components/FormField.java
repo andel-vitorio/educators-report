@@ -12,6 +12,7 @@ import java.awt.geom.RoundRectangle2D;
 public class FormField extends JPanel {
     private JLabel formLabel;
     private RoundedTextField formInput;
+		int width, height;
 
     public FormField(String label, int width) {
         setLayout(new BorderLayout());
@@ -19,6 +20,8 @@ public class FormField extends JPanel {
         setMaximumSize(getPreferredSize());
         setSize(getPreferredSize());
         setOpaque(false);
+
+				this.width = width;
 
         this.formLabel = new JLabel(label);
         this.formLabel.setFont(FontsManager.getFont(FontType.REGULAR, 12));
@@ -41,6 +44,12 @@ public class FormField extends JPanel {
     public void setWidthLabel(int width) {
         this.formLabel.setPreferredSize(new Dimension(width, 0));
     }
+
+		public void setHeight(int height) {
+			setPreferredSize(new Dimension(width, height));
+			setMaximumSize(getPreferredSize());
+			setSize(getPreferredSize());
+		}
 
     public String getText() {
         return this.formInput.getText();
