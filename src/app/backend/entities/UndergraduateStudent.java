@@ -12,6 +12,14 @@ public class UndergraduateStudent extends Student {
 		this.typeOfOrientation = typeOfOrientation;
 	}
 
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public String getTypeOfOrientation() {
+		return typeOfOrientation;
+	}
+
 	@Override
 	public String toString() {
 		return "UndergraduateStudent{" +
