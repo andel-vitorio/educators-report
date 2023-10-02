@@ -2,34 +2,19 @@ package app.frontend.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 
-import app.frontend.components.Button.ButtonType;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
-import res.values.ColorsManager;
 import utils.ComponentDecorator;
 
 public class DatePicker extends JPanel {

@@ -1,8 +1,6 @@
 package app.frontend.screens.subjects.forms;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,27 +8,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
-import java.text.Normalizer.Form;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JViewport;
 
-import app.backend.entities.Teacher;
 import app.frontend.components.Button;
 import app.frontend.components.Button.ButtonType;
-import app.frontend.components.DatePicker;
 import app.frontend.components.FormField;
-import app.frontend.models.TeacherTableModel;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
 import res.values.ColorsManager;
@@ -38,18 +27,8 @@ import res.values.DimensManager;
 import utils.ComponentDecorator;
 
 import app.backend.entities.Subjects;
-import app.backend.entities.Teacher;
-import app.frontend.components.Button;
-import app.frontend.components.Button.ButtonType;
 import app.frontend.components.TimePicker;
-import app.frontend.components.FormField;
 import app.frontend.models.SubjectTableModel;
-import app.frontend.models.TeacherTableModel;
-import res.fonts.FontsManager;
-import res.fonts.FontsManager.FontType;
-import res.values.ColorsManager;
-import res.values.DimensManager;
-import utils.ComponentDecorator;
 
 public class SubjectForm extends JFrame {
 

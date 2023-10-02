@@ -27,8 +27,6 @@ import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
 import app.backend.entities.CoordinationActivity;
-import app.backend.entities.Paper;
-import app.frontend.models.CoordinationActivityTableModel;
 import app.frontend.models.CoordinationActivityTableModel;
 
 public class CoordinationActivityForm extends JFrame {
