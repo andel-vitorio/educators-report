@@ -1,6 +1,5 @@
 package app.frontend.models;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;

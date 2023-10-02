@@ -10,7 +10,6 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 import app.backend.entities.Subjects;
-import app.backend.entities.Teacher;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
@@ -18,7 +17,6 @@ import app.frontend.components.Button.ButtonInfo;
 import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.SubjectTableModel;
-import app.frontend.models.TeacherTableModel;
 import app.frontend.screens.subjects.forms.SubjectForm;
 import app.frontend.screens.subjects.forms.SubjectForm.ActionType;
 import res.img.ImagesManager;
