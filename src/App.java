@@ -2,6 +2,7 @@
 import javax.swing.*;
 
 import app.frontend.components.*;
+import app.frontend.screens.students.StudentsManager;
 import app.frontend.screens.subjects.SubjectsManager;
 import app.frontend.screens.teachers.TeachersManager;
 
@@ -16,6 +17,7 @@ public class App extends JFrame {
 
 	private static final String TEACHER_WINDOWS_ID = "teacher-windows";
 	private static final String SUBJECT_WINDOWS_ID = "subject-windows";
+	private static final String STUDENT_WINDOWS_ID = "student-windows";
 
 	public App() throws IOException {
 		super("Educator's Report");
@@ -45,11 +47,12 @@ public class App extends JFrame {
 		windows.setLayout(new CardLayout());
 		windows.add(new TeachersManager(), TEACHER_WINDOWS_ID);
 		windows.add(new SubjectsManager(), SUBJECT_WINDOWS_ID);
+		windows.add(new StudentsManager(), STUDENT_WINDOWS_ID);
 		
 		Navigation navigation = new Navigation(300, 300, null);
 		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), TEACHER_WINDOWS_ID);
 		navigation.setItem("Disciplinas", ImagesManager.getClassIcon(), SUBJECT_WINDOWS_ID);
-		navigation.setItem("Alunos", ImagesManager.getStudentIcon(), "student");
+		navigation.setItem("Alunos", ImagesManager.getStudentIcon(), STUDENT_WINDOWS_ID);
 		navigation.setItem("Artigos", ImagesManager.getPaperIcon(), "paper");
 		navigation.setItem("Atividades", ImagesManager.getActivityIcon(), "activity");
 
