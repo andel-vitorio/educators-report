@@ -23,6 +23,8 @@ import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.StudentsTableModel;
 import app.frontend.models.StudentsTableModel;
 import app.frontend.models.TeacherTableModel;
+import app.frontend.screens.students.forms.StudentForm;
+import app.frontend.screens.students.forms.StudentForm.StudentActionType;
 import app.frontend.screens.subjects.forms.SubjectForm;
 import app.frontend.screens.subjects.forms.SubjectForm.ActionType;
 import res.img.ImagesManager;
@@ -46,10 +48,10 @@ public class StudentsManager extends JPanel {
 		topBar.setBackground(ColorsManager.getOnBackgroundColor());
 		ComponentDecorator.addBorderBottom(topBar, 1);
 
-		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
+		topBar.setActionButton("Cadastrar Aluno", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// add forms here
+				new StudentForm(studentsTableModel, StudentActionType.ADD_STUDENT);
 			}
 		});
 
@@ -132,6 +134,7 @@ public class StudentsManager extends JPanel {
 		posgraduateStudent.setEmail("fernanda@example.com");
 		posgraduateStudent.setPhoneNumber("+55 987 654 321");
 		posgraduateStudent.setStatus("Ativo");
+		posgraduateStudent.setNameOfMentee("Maria");
 		posgraduateStudent.setPosgraduateProgram("Mestrado em Ciência da Computação");
 		posgraduateStudent.setResearchTitle("Algoritmos Quânticos Avançados");
 		posgraduateStudent.setDefenseDate(LocalDate.of(2022, 11, 30));
@@ -150,7 +153,7 @@ public class StudentsManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		Student student = studentsTableModel.getStudentAt(selectedRow);
-		// add forms here
+		new StudentForm(studentsTableModel, StudentActionType.EDIT_STUDENT, student);
 	}
 
 	private void showSubjectInfo() {
@@ -162,7 +165,7 @@ public class StudentsManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		Student student = studentsTableModel.getStudentAt(selectedRow);
-		// add forms here
+		new StudentForm(studentsTableModel, StudentActionType.INFO_STUDENT, student);
 
 	}
 
