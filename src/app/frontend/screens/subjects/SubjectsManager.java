@@ -1,4 +1,4 @@
-package app.frontend.screens.teachers;
+package app.frontend.screens.subjects;
 
 import javax.swing.JPanel;
 
@@ -9,6 +9,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import java.util.ArrayList;
 
+import app.backend.entities.Subjects;
 import app.backend.entities.Teacher;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
@@ -16,24 +17,25 @@ import app.frontend.components.TopBar;
 import app.frontend.components.Button.ButtonInfo;
 import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
+import app.frontend.models.SubjectTableModel;
 import app.frontend.models.TeacherTableModel;
-import app.frontend.screens.teachers.forms.TeacherForm;
-import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
+import app.frontend.screens.subjects.forms.SubjectForm;
+import app.frontend.screens.subjects.forms.SubjectForm.ActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
 import java.time.*;
 
-public class TeachersManager extends JPanel {
+public class SubjectsManager extends JPanel {
 
-	private static final String TITLE_WINDOW = "Gerenciamento de Professores";
+	private static final String TITLE_WINDOW = "Gerenciamento de Disciplinas";
 
 	private TopBar topBar;
 	private Table table;
-	private TeacherTableModel teacherTableModel;
+	private SubjectTableModel subjectTableModel;
 	private int lastSelectedRow = 0;
 
-	public TeachersManager() {
+	public SubjectsManager() {
 		this.setLayout(new BorderLayout(0, 0));
 
 		topBar = new TopBar(TITLE_WINDOW);
@@ -43,7 +45,7 @@ public class TeachersManager extends JPanel {
 		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new TeacherForm(teacherTableModel, ActionType.ADD_TEACHER);
+				new SubjectForm(subjectTableModel, ActionType.ADD_SUBJECT);
 			}
 		});
 
@@ -72,21 +74,20 @@ public class TeachersManager extends JPanel {
 			}
 		};
 
-		teacherTableModel = new TeacherTableModel();
-		table = new Table(teacherTableModel);
+		subjectTableModel = new SubjectTableModel();
+		table = new Table(subjectTableModel);
 
 		ArrayList<ButtonInfo> buttonInfos =  new ArrayList<>();
-		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> { showTeacherInfo(); }));
-		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> { editTeacher(); }));
-		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> { deleteTeacher(); }));
+		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> { showSubjectInfo(); }));
+		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> { editSubject(); }));
+		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> { deleteSubject(); }));
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
 		CellEditor actionsButtonCellEditor = new CellEditor(actionsButtons);
 		CellRenderer actionsButtonCellRenderer = new CellRenderer(actionsButtons);
 
-		table.setCustomColumn(TeacherTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor, actionsButtonCellRenderer);
-		table.setColumnWidth(0, 200);
-		table.setColumnWidth(2, 120);
+		table.setCustomColumn(SubjectTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor, actionsButtonCellRenderer);
+		table.setColumnWidth(SubjectTableModel.ACTIONS_BUTTON_COLUMN_INDEX, 120);
 
 		tableContainer.setLayout(new BorderLayout());
 		tableContainer.add(table, BorderLayout.CENTER);
@@ -100,47 +101,45 @@ public class TeachersManager extends JPanel {
 		
 		this.add(contentContainer);
 
-		Teacher teacher = new Teacher();
+		Subjects subject = new Subjects();
 
-		teacher.setBirthDay(LocalDate.of(2023, 12, 31));
-		teacher.setEmail("email@asdas");
-		teacher.setIndenticatorNumber("2123");
-		teacher.setName("Andel");
-		teacher.setPhone("12312313");
-		teacher.setTrainingArea("TEste");
-		teacher.setYearsOfExperience(123);
+		subject.setCode("MATH101");
+		subject.setName("Matemática Básica");
+		subject.setDescription("Um curso introdutório de matemática.");
+		subject.setStartTime(LocalTime.of(9, 0)); // Horário de início às 9:00
+		subject.setEndTime(LocalTime.of(11, 0));  // Horário de término às 11:00
+		subject.setClassroom("Sala 101");
+		subject.setTeacherName("Professor Smith");
+		subject.setRequirements("Nenhum pré-requisito necessário");
+		subject.setCourseLoad(60);  // 60 horas de carga horária
+		subject.setCredits(3);     // 3 créditos
+		subject.setNumberOfVacancies(30);  // 30 vagas disponíveis
 
-		ArrayList<Teacher> teachers = new ArrayList<>();
-
-		teachers.add(teacher);
-
-		teacherTableModel.setTeachersList(teachers);
-		teacherTableModel.updateTable();
+		subjectTableModel.setSubjects(subject);
+		subjectTableModel.updateTable();
 	}
 
-	private void editTeacher() {
+	private void editSubject() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
 		else lastSelectedRow = selectedRow; 
 		
-		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
-
-		new TeacherForm(teacherTableModel, ActionType.EDIT_TEACHER, teacher);
+		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
+		new SubjectForm(subjectTableModel, ActionType.EDIT_SUBJECT, subject);
 	}
 
-	private void showTeacherInfo() {
+	private void showSubjectInfo() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
 		else lastSelectedRow = selectedRow; 
 
-		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
-		
-		new TeacherForm(teacherTableModel, ActionType.INFO_TEACHER, teacher);
+		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
+		new SubjectForm(subjectTableModel, ActionType.INFO_SUBJECT, subject);
 	}
 
-	private void deleteTeacher() {
-		System.out.println("Delete Teacher");
+	private void deleteSubject() {
+		System.out.println("Delete Subject");
 	}
 }

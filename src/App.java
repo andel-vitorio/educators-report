@@ -2,6 +2,7 @@
 import javax.swing.*;
 
 import app.frontend.components.*;
+import app.frontend.screens.subjects.SubjectsManager;
 import app.frontend.screens.teachers.TeachersManager;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import res.values.*;
 public class App extends JFrame {
 
 	private static final String TEACHER_WINDOWS_ID = "teacher-windows";
+	private static final String SUBJECT_WINDOWS_ID = "subject-windows";
 
 	public App() throws IOException {
 		super("Educator's Report");
@@ -38,17 +40,24 @@ public class App extends JFrame {
 
 	void addComponents() throws IOException {
 
+		
+		JPanel windows = new JPanel();
+		windows.setLayout(new CardLayout());
+		windows.add(new TeachersManager(), TEACHER_WINDOWS_ID);
+		windows.add(new SubjectsManager(), SUBJECT_WINDOWS_ID);
+		
 		Navigation navigation = new Navigation(300, 300, null);
-		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), "teacher");
-		navigation.setItem("Disciplinas", ImagesManager.getClassIcon(), "class");
+		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), TEACHER_WINDOWS_ID);
+		navigation.setItem("Disciplinas", ImagesManager.getClassIcon(), SUBJECT_WINDOWS_ID);
 		navigation.setItem("Alunos", ImagesManager.getStudentIcon(), "student");
 		navigation.setItem("Artigos", ImagesManager.getPaperIcon(), "paper");
 		navigation.setItem("Atividades", ImagesManager.getActivityIcon(), "activity");
 
-		JPanel windows = new JPanel();
-		windows.setLayout(new CardLayout());
-		windows.add(new TeachersManager(), TEACHER_WINDOWS_ID);
-
+		navigation.getObservable().addObserver(action -> {
+			CardLayout card = (CardLayout) windows.getLayout();
+			card.show(windows, action);
+		});
+		
 		SideBar sideBar = new SideBar(260, 720);
 		sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
 				.setHeader("Educator's Report", "Versão 1.0", ImagesManager.getLogo())
