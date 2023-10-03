@@ -77,13 +77,13 @@ public class PapersManager extends JPanel {
 
 		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> {
-			showSubjectInfo();
+			showPaperInfo();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> {
-			editSubject();
+			editPaper();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> {
-			deleteSubject();
+			deletePaper();
 		}));
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
@@ -119,7 +119,7 @@ public class PapersManager extends JPanel {
 		papersTableModel.updateTable();
 	}
 
-	private void editSubject() {
+	private void editPaper() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if (selectedRow == -1)
@@ -131,7 +131,7 @@ public class PapersManager extends JPanel {
 		new PaperForm(papersTableModel, PaperActionType.EDIT_PAPER, paper);
 	}
 
-	private void showSubjectInfo() {
+	private void showPaperInfo() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if (selectedRow == -1)
@@ -143,7 +143,7 @@ public class PapersManager extends JPanel {
 		new PaperForm(papersTableModel, PaperActionType.INFO_PAPER, paper);
 	}
 
-	private void deleteSubject() {
-		System.out.println("Delete Subject");
+	private void deletePaper() {
+		System.out.println("Delete Paper");
 	}
 }
