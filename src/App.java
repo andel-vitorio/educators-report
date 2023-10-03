@@ -6,6 +6,7 @@ import app.frontend.screens.activities.CoordinationActivityManager;
 import app.frontend.screens.papers.PapersManager;
 import app.frontend.screens.students.StudentsManager;
 import app.frontend.screens.subjects.SubjectsManager;
+import app.frontend.screens.teachers.TeacherManager;
 import app.frontend.screens.teachers.TeachersManager;
 
 import java.io.IOException;
@@ -46,13 +47,16 @@ public class App extends JFrame {
 
 	void addComponents() throws IOException {
 
+		TeachersManager teachersManager = new TeachersManager();
+
 		JPanel windows = new JPanel();
 		windows.setLayout(new CardLayout());
-		windows.add(new TeachersManager(), TEACHER_WINDOWS_ID);
+		windows.add(teachersManager, TEACHER_WINDOWS_ID);
 		windows.add(new SubjectsManager(), SUBJECT_WINDOWS_ID);
 		windows.add(new StudentsManager(), STUDENT_WINDOWS_ID);
 		windows.add(new PapersManager(), PAPER_WINDOWS_ID);
 		windows.add(new CoordinationActivityManager(), ACTIVITY_WINDOWS_ID);
+		windows.add(new TeacherManager(), TeachersManager.ACTIVITY_TEACHER_WINDOWS_ID);
 		
 		Navigation navigation = new Navigation(300, 300, null);
 		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), TEACHER_WINDOWS_ID);
@@ -62,6 +66,11 @@ public class App extends JFrame {
 		navigation.setItem("Atividades", ImagesManager.getActivityIcon(), ACTIVITY_WINDOWS_ID);
 
 		navigation.getObservable().addObserver(action -> {
+			CardLayout card = (CardLayout) windows.getLayout();
+			card.show(windows, action);
+		});
+
+		teachersManager.getObservable().addObserver(action -> {
 			CardLayout card = (CardLayout) windows.getLayout();
 			card.show(windows, action);
 		});
