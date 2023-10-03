@@ -47,18 +47,18 @@ public class SubjectForm extends JFrame {
 	private FormField creditsFormField;
 	private FormField numberOfVacanciesFormField;
 
-	public enum ActionType {
+	public enum SubjectActionType {
 		EDIT_SUBJECT, ADD_SUBJECT, INFO_SUBJECT
 	}
 
-	public SubjectForm(SubjectTableModel teacherTableModel, ActionType actionType) {
+	public SubjectForm(SubjectTableModel teacherTableModel, SubjectActionType actionType) {
 		super("");
 
 		String title;
 
-		if (actionType == ActionType.EDIT_SUBJECT)
+		if (actionType == SubjectActionType.EDIT_SUBJECT)
 			title = "Editar Informações";
-		else if (actionType == ActionType.ADD_SUBJECT)
+		else if (actionType == SubjectActionType.ADD_SUBJECT)
 			title = "Cadastrar Disciplina";
 		else {
 			title = "Dados da Disciplina";
@@ -88,7 +88,7 @@ public class SubjectForm extends JFrame {
 		setVisible(true);
 	}
 
-	public SubjectForm(SubjectTableModel subjectTableModel, ActionType actionType, Subjects subject) {
+	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Subjects subject) {
 		this(subjectTableModel, actionType);
 		codeFormField.setText(subject.getCode());
 		nameFormField.setText(subject.getName());
