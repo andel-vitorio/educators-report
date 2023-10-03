@@ -18,7 +18,7 @@ import app.frontend.components.Table.CellEditor;
 import app.frontend.components.Table.CellRenderer;
 import app.frontend.models.SubjectTableModel;
 import app.frontend.screens.subjects.forms.SubjectForm;
-import app.frontend.screens.subjects.forms.SubjectForm.ActionType;
+import app.frontend.screens.subjects.forms.SubjectForm.SubjectActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
@@ -43,7 +43,7 @@ public class SubjectsManager extends JPanel {
 		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new SubjectForm(subjectTableModel, ActionType.ADD_SUBJECT);
+				new SubjectForm(subjectTableModel, SubjectActionType.ADD_SUBJECT);
 			}
 		});
 
@@ -124,7 +124,7 @@ public class SubjectsManager extends JPanel {
 		else lastSelectedRow = selectedRow; 
 		
 		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
-		new SubjectForm(subjectTableModel, ActionType.EDIT_SUBJECT, subject);
+		new SubjectForm(subjectTableModel, SubjectActionType.EDIT_SUBJECT, subject);
 	}
 
 	private void showSubjectInfo() {
@@ -134,7 +134,7 @@ public class SubjectsManager extends JPanel {
 		else lastSelectedRow = selectedRow; 
 
 		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
-		new SubjectForm(subjectTableModel, ActionType.INFO_SUBJECT, subject);
+		new SubjectForm(subjectTableModel, SubjectActionType.INFO_SUBJECT, subject);
 	}
 
 	private void deleteSubject() {

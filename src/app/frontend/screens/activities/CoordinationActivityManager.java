@@ -78,13 +78,13 @@ public class CoordinationActivityManager extends JPanel {
 
 		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> {
-			showSubjectInfo();
+			showCoordinationActivityInfo();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> {
-			editSubject();
+			editCoordinationActivity();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> {
-			deleteSubject();
+			deleteCoordinationActivity();
 		}));
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
@@ -121,7 +121,7 @@ public class CoordinationActivityManager extends JPanel {
 		coordinationActivityTableModel.updateTable();
 	}
 
-	private void editSubject() {
+	private void editCoordinationActivity() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if (selectedRow == -1)
@@ -134,7 +134,7 @@ public class CoordinationActivityManager extends JPanel {
 						CoordinationActivityActionType.EDIT_ACTIVITY, activity);
 	}
 
-	private void showSubjectInfo() {
+	private void showCoordinationActivityInfo() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if (selectedRow == -1)
@@ -147,7 +147,7 @@ public class CoordinationActivityManager extends JPanel {
 						CoordinationActivityActionType.EDIT_ACTIVITY, activity);
 	}
 
-	private void deleteSubject() {
+	private void deleteCoordinationActivity() {
 		System.out.println("Delete Activity");
 	}
 }
