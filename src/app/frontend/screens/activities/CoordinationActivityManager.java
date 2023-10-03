@@ -10,6 +10,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 import app.backend.entities.CoordinationActivity;
+import app.backend.services.CoordinationActivityService;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
@@ -107,18 +108,10 @@ public class CoordinationActivityManager extends JPanel {
 
 		this.add(contentContainer);
 
-		CoordinationActivity activity = new CoordinationActivity();
+		ArrayList<CoordinationActivity> coordinationActivities = CoordinationActivityService.getCoordinationActivities();
 
-		activity.setActivityTitle("Reunião de Planejamento");
-		activity.setNameOfPersonResponsible("João Silva");
-		activity.setStartDate(LocalDate.of(2023, 10, 1));
-		activity.setEndDate(LocalDate.of(2023, 10, 5));
-		activity.setPriiority("Alta");
-		activity.setStatus("Em Andamento");
-		activity.setDescription("Reunião para planejar as atividades do próximo trimestre.");
-
-		coordinationActivityTableModel.setCoordinationActivity(activity);
-		coordinationActivityTableModel.updateTable();
+		if ( coordinationActivities != null )
+			coordinationActivityTableModel.setCoordinationActivityList(coordinationActivities);
 	}
 
 	private void editCoordinationActivity() {
@@ -131,7 +124,7 @@ public class CoordinationActivityManager extends JPanel {
 
 		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
 		new CoordinationActivityForm(coordinationActivityTableModel,
-						CoordinationActivityActionType.EDIT_ACTIVITY, activity);
+				CoordinationActivityActionType.EDIT_ACTIVITY, activity);
 	}
 
 	private void showCoordinationActivityInfo() {
@@ -144,10 +137,20 @@ public class CoordinationActivityManager extends JPanel {
 
 		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
 		new CoordinationActivityForm(coordinationActivityTableModel,
-						CoordinationActivityActionType.EDIT_ACTIVITY, activity);
+				CoordinationActivityActionType.EDIT_ACTIVITY, activity);
 	}
 
 	private void deleteCoordinationActivity() {
-		System.out.println("Delete Activity");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
+
+		CoordinationActivityService.deleteCoordinationActivityById(activity.getId());
+		coordinationActivityTableModel.setCoordinationActivityList(CoordinationActivityService.getCoordinationActivities());
 	}
 }

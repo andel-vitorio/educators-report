@@ -27,7 +27,11 @@ import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
 import app.backend.entities.CoordinationActivity;
+import app.backend.entities.Teacher;
+import app.backend.services.CoordinationActivityService;
+import app.backend.services.TeacherService;
 import app.frontend.models.CoordinationActivityTableModel;
+import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
 
 public class CoordinationActivityForm extends JFrame {
 
@@ -45,11 +49,19 @@ public class CoordinationActivityForm extends JFrame {
 	public enum CoordinationActivityActionType {
 		EDIT_ACTIVITY, ADD_ACTIVITY, INFO_ACTIVITY
 	}
+	
+	CoordinationActivity coordinationActivity;
+	CoordinationActivityActionType coordinationActivityActionType;
+	CoordinationActivityTableModel coordinationActivityTableModel;
+
 
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType) {
 		super("");
 
 		String title;
+
+		this.coordinationActivityActionType = actionType;
+		this.coordinationActivityTableModel = coordinationActivityTableModel;
 
 		if (actionType == CoordinationActivityActionType.EDIT_ACTIVITY)
 			title = "Editar Informações";
@@ -86,7 +98,9 @@ public class CoordinationActivityForm extends JFrame {
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType,
 			CoordinationActivity activity) {
 		this(coordinationActivityTableModel, actionType);
-		// Preencher os campos do formulário
+		
+		this.coordinationActivity = activity;
+
 		activityTitleFormField.setText(activity.getActivityTitle());
 		nameOfPersonResponsibleFormField.setText(activity.getNameOfPersonResponsible());
 		priorityFormField.setText(activity.getPriiority());
@@ -275,7 +289,9 @@ public class CoordinationActivityForm extends JFrame {
 	private void confirm() {
 
 		if (isEditable) {
-			CoordinationActivity activity = new CoordinationActivity();
+
+			if ( coordinationActivityActionType == CoordinationActivityActionType.ADD_ACTIVITY )
+				coordinationActivity = new CoordinationActivity();
 
 			String activityTitle = activityTitleFormField.getText();
 			String nameOfPersonResponsible = nameOfPersonResponsibleFormField.getText();
@@ -286,15 +302,18 @@ public class CoordinationActivityForm extends JFrame {
 			LocalDate startDate = startDatePicker.getDate();
 			LocalDate endDate = endDatePicker.getDate();
 
-			activity.setActivityTitle(activityTitle);
-			activity.setNameOfPersonResponsible(nameOfPersonResponsible);
-			activity.setPriiority(priority);
-			activity.setStatus(status);
-			activity.setDescription(description);
-			activity.setStartDate(startDate);
-			activity.setEndDate(endDate);
+			coordinationActivity.setActivityTitle(activityTitle);
+			coordinationActivity.setNameOfPersonResponsible(nameOfPersonResponsible);
+			coordinationActivity.setPriiority(priority);
+			coordinationActivity.setStatus(status);
+			coordinationActivity.setDescription(description);
+			coordinationActivity.setStartDate(startDate);
+			coordinationActivity.setEndDate(endDate);
 
-			System.out.println(activity);
+			if ( coordinationActivityActionType == CoordinationActivityActionType.ADD_ACTIVITY ) CoordinationActivityService.postCoordinationActivity(coordinationActivity);
+			else if ( coordinationActivityActionType == CoordinationActivityActionType.EDIT_ACTIVITY ) CoordinationActivityService.updateCoordinationActivityById(coordinationActivity.getId(), coordinationActivity);
+
+			coordinationActivityTableModel.setCoordinationActivityList(CoordinationActivityService.getCoordinationActivities());
 		}
 
 		dispose();
