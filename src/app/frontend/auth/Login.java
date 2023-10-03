@@ -24,6 +24,7 @@ import res.fonts.FontsManager.FontType;
 import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
+import utils.Observable;
 import app.backend.Database;
 
 public class Login extends JFrame {
@@ -33,6 +34,8 @@ public class Login extends JFrame {
 
 	private FormField userFormField;
 	private FormField passwordFormField;
+
+	private Observable observable = new Observable();
 
 
 	public Login() {
@@ -164,6 +167,11 @@ public class Login extends JFrame {
 
 	private void confirm() {
 		new Database(userFormField.getText(), passwordFormField.getText());
+		observable.notifyObservers("confirmed-login");
 		dispose();
+	}
+
+	public Observable getObservable() {
+		return observable;
 	}
 }

@@ -39,4 +39,12 @@ public class Database {
             throw new RuntimeException("Failed to disconnect from the database.");
         }
     }
+
+		public static String getPass() {
+			return pass;
+		}
+
+		public static String getUser() {
+			return user;
+		}
 }
