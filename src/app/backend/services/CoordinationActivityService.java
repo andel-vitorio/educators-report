@@ -81,6 +81,33 @@ public class CoordinationActivityService extends Database {
 		}
 	}
 
+	public static ArrayList<CoordinationActivity> getActivitiesByNameOfPersonResponsible(String personName) {
+    ArrayList<CoordinationActivity> coordinationActivities = new ArrayList<>();
+
+    try {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM coordination_activities WHERE nameOfPersonResponsible='" + personName + "'");
+
+        while (rs.next()) {
+            CoordinationActivity activity = new CoordinationActivity();
+            activity.setActivityTitle(rs.getString("activityTitle"));
+            activity.setNameOfPersonResponsible(rs.getString("nameOfPersonResponsible"));
+            activity.setStartDate(rs.getDate("startDate").toLocalDate());
+            activity.setEndDate(rs.getDate("endDate").toLocalDate());
+            activity.setPriiority(rs.getString("priority"));
+            activity.setStatus(rs.getString("status"));
+            activity.setDescription(rs.getString("description"));
+            activity.setId(rs.getInt("id"));
+            coordinationActivities.add(activity);
+        }
+
+        return coordinationActivities;
+    } catch (SQLException e) {
+        System.out.println("Erro ao obter informações sobre as atividades de coordenação");
+        return null;
+    }
+}
+
 	public static boolean postCoordinationActivity(CoordinationActivity activity) {
 		try {
 			Statement st = connection.createStatement();

@@ -88,6 +88,36 @@ public class UndergraduateStudentService extends Database {
 		}
 	}
 
+	public static ArrayList<UndergraduateStudent> getUndergraduateStudentsByNameOfMentee(String nameOfMentee) {
+    ArrayList<UndergraduateStudent> undergraduateStudents = new ArrayList<>();
+
+    try {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM undergraduate_students WHERE nameOfMentee = '" + nameOfMentee + "'");
+
+        while (rs.next()) {
+            UndergraduateStudent student = new UndergraduateStudent();
+            student.setName(rs.getString("name"));
+            student.setDateOfEntry(rs.getDate("dateOfEntry").toLocalDate());
+            student.setRegistration(rs.getString("registration"));
+            student.setEmail(rs.getString("email"));
+            student.setPhoneNumber(rs.getString("phoneNumber"));
+            student.setNameOfMentee(rs.getString("nameOfMentee"));
+            student.setStatus(rs.getString("status"));
+            student.setProjectName(rs.getString("projectName"));
+            student.setTypeOfOrientation(rs.getString("typeOfOrientation"));
+            student.setId(rs.getInt("id"));
+            undergraduateStudents.add(student);
+        }
+
+        return undergraduateStudents;
+    } catch (SQLException e) {
+        System.out.println("Erro ao obter informações sobre os estudantes de graduação por nome de mentor");
+        return null;
+    }
+}
+
+
 	public static boolean postUndergraduateStudent(UndergraduateStudent student) {
 		try {
 			Statement st = connection.createStatement();

@@ -72,6 +72,7 @@ public class App extends JFrame {
 	void addComponents() throws IOException {
 
 		TeachersManager teachersManager = new TeachersManager();
+		TeacherManager teacherManager = new TeacherManager();
 
 		JPanel windows = new JPanel();
 		windows.setLayout(new CardLayout());
@@ -80,7 +81,7 @@ public class App extends JFrame {
 		windows.add(new StudentsManager(), STUDENT_WINDOWS_ID);
 		windows.add(new PapersManager(), PAPER_WINDOWS_ID);
 		windows.add(new CoordinationActivityManager(), ACTIVITY_WINDOWS_ID);
-		windows.add(new TeacherManager(), TeachersManager.ACTIVITY_TEACHER_WINDOWS_ID);
+		windows.add(teacherManager, TeachersManager.ACTIVITY_TEACHER_WINDOWS_ID);
 		
 		Navigation navigation = new Navigation(300, 300, null);
 		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), TEACHER_WINDOWS_ID);
@@ -96,6 +97,8 @@ public class App extends JFrame {
 
 		teachersManager.getObservable().addObserver(action -> {
 			CardLayout card = (CardLayout) windows.getLayout();
+			teacherManager.setTeacher(teachersManager.getSelectedTeacher());
+			teacherManager.showSubjectsTable();
 			card.show(windows, action);
 		});
 		

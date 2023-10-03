@@ -90,6 +90,36 @@ public class PosgraduateStudentService extends Database {
 		}
 	}
 
+	public static ArrayList<PosgraduateStudent> getPosgraduateStudentsByNameOfMentee(String nameOfMentee) {
+    ArrayList<PosgraduateStudent> posgraduateStudents = new ArrayList<>();
+
+    try {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM posgraduate_students WHERE nameOfMentee = '" + nameOfMentee + "'");
+
+        while (rs.next()) {
+            PosgraduateStudent student = new PosgraduateStudent();
+            student.setName(rs.getString("name"));
+            student.setDateOfEntry(rs.getDate("dateOfEntry").toLocalDate());
+            student.setRegistration(rs.getString("registration"));
+            student.setEmail(rs.getString("email"));
+            student.setPhoneNumber(rs.getString("phoneNumber"));
+            student.setNameOfMentee(rs.getString("nameOfMentee"));
+            student.setStatus(rs.getString("status"));
+            student.setPosgraduateProgram(rs.getString("posgraduateProgram"));
+            student.setResearchTitle(rs.getString("researchTitle"));
+            student.setDefenseDate(rs.getDate("defenseDate").toLocalDate());
+            student.setId(rs.getInt("id"));
+            posgraduateStudents.add(student);
+        }
+
+        return posgraduateStudents;
+    } catch (SQLException e) {
+        System.out.println("Erro ao obter informações sobre os estudantes de pós-graduação por nome de mentor");
+        return null;
+    }
+}
+
 	public static boolean postPosgraduateStudent(PosgraduateStudent student) {
 		try {
 			Statement st = connection.createStatement();

@@ -83,6 +83,33 @@ public class PaperService extends Database {
 		}
 	}
 
+	public static ArrayList<Paper> getPapersByAuthor(String professorName) {
+		ArrayList<Paper> papers = new ArrayList<>();
+
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM papers WHERE authors LIKE '%" + professorName + "%'");
+
+			while (rs.next()) {
+				Paper paper = new Paper();
+				paper.setTitle(rs.getString("title"));
+				paper.setAuthors(rs.getString("authors"));
+				paper.setPublicationDate(rs.getDate("publicationDate").toLocalDate());
+				paper.setKeywords(rs.getString("keywords"));
+				paper.setDescription(rs.getString("description"));
+				paper.setCategory(rs.getString("category"));
+				paper.setUrl(rs.getString("url"));
+				paper.setId(rs.getInt("id"));
+				papers.add(paper);
+			}
+
+			return papers;
+		} catch (SQLException e) {
+			System.out.println("Erro ao obter informações sobre os papers por autor");
+			return null;
+		}
+	}
+
 	public static boolean postPaper(Paper paper) {
 		try {
 			Statement st = connection.createStatement();

@@ -9,12 +9,8 @@ import java.awt.geom.RoundRectangle2D;
 
 import java.util.ArrayList;
 
-import app.backend.entities.CoordinationActivity;
-import app.backend.entities.Paper;
-import app.backend.entities.PosgraduateStudent;
-import app.backend.entities.Student;
-import app.backend.entities.Teacher;
-import app.backend.entities.UndergraduateStudent;
+import app.backend.entities.*;
+import app.backend.services.*;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.ComboBox;
 import app.frontend.components.Table;
@@ -57,6 +53,11 @@ public class TeacherManager extends JPanel {
 	private int lastSelectedRow = 0;
 	private ComboBox comboBox;
 	private JPanel contentContainer;
+	private Teacher teacher;
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
 
 	public TeacherManager() {
 		this.setLayout(new BorderLayout(0, 0));
@@ -113,7 +114,6 @@ public class TeacherManager extends JPanel {
 
 				switch (selectedOption) {
 					case 0: {
-						contentContainer.removeAll();
 						showSubjectsTable();
 						break;
 					}
@@ -147,7 +147,9 @@ public class TeacherManager extends JPanel {
 		this.add(contentContainer);
 	}
 
-	private void showSubjectsTable() {
+	public void showSubjectsTable() {
+
+		contentContainer.removeAll();
 
 		JPanel tableContainer = new JPanel() {
 			@Override
@@ -172,23 +174,23 @@ public class TeacherManager extends JPanel {
 
 		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> {
-			showTeacherInfo();
+			showSubjectInfo();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> {
-			editTeacher();
+			editSubject();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> {
-			deleteTeacher();
+			deleteSubject();
 		}));
 
-		teacherTableModel = new TeacherTableModel();
-		table = new Table(teacherTableModel);
+		subjectTableModel = new SubjectTableModel();
+		table = new Table(subjectTableModel);
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
 		CellEditor actionsButtonCellEditor = new CellEditor(actionsButtons);
 		CellRenderer actionsButtonCellRenderer = new CellRenderer(actionsButtons);
 
-		table.setCustomColumn(TeacherTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor,
+		table.setCustomColumn(SubjectTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor,
 				actionsButtonCellRenderer);
 		table.setColumnWidth(0, 200);
 		table.setColumnWidth(2, 200);
@@ -205,52 +207,11 @@ public class TeacherManager extends JPanel {
 		ComponentDecorator.addPadding(tableContainer, 12);
 		ComponentDecorator.addPadding(contentContainer, 24);
 
-		Teacher teacher = new Teacher();
-
-		teacher.setBirthDay(LocalDate.of(2023, 12, 31));
-		teacher.setEmail("email@asdas");
-		teacher.setIndentificatorNumber("2123");
-		teacher.setName("Andel");
-		teacher.setPhone("12312313");
-		teacher.setTrainingArea("TEste");
-		teacher.setYearsOfExperience(123);
-
-		ArrayList<Teacher> teachers = new ArrayList<>();
-
-		teachers.add(teacher);
-
-		teacherTableModel.setTeachersList(teachers);
-		teacherTableModel.updateTable();
-	}
-
-	private void editTeacher() {
-		int selectedRow = table.getComponent().getSelectedRow();
-
-		if (selectedRow == -1)
-			selectedRow = lastSelectedRow;
-		else
-			lastSelectedRow = selectedRow;
-
-		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
-
-		new TeacherForm(teacherTableModel, ActionType.EDIT_TEACHER, teacher);
-	}
-
-	private void showTeacherInfo() {
-		int selectedRow = table.getComponent().getSelectedRow();
-
-		if (selectedRow == -1)
-			selectedRow = lastSelectedRow;
-		else
-			lastSelectedRow = selectedRow;
-
-		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
-
-		new TeacherForm(teacherTableModel, ActionType.INFO_TEACHER, teacher);
-	}
-
-	private void deleteTeacher() {
-		System.out.println("Delete Teacher");
+		if (teacher == null)
+			return;
+		ArrayList<Subjects> subjects = SubjectsService.getSubjectsByTeacherName(teacher.getName());
+		if (subjects != null)
+			subjectTableModel.setSubjectsList(subjects);
 	}
 
 	private void showStudents() {
@@ -307,34 +268,22 @@ public class TeacherManager extends JPanel {
 		ComponentDecorator.addPadding(tableContainer, 12);
 		ComponentDecorator.addPadding(contentContainer, 24);
 
-		UndergraduateStudent undergraduateStudent = new UndergraduateStudent();
+		if (teacher == null)
+			return;
 
-		undergraduateStudent.setName("João");
-		undergraduateStudent.setDateOfEntry(LocalDate.of(2022, 9, 1));
-		undergraduateStudent.setRegistration("123456");
-		undergraduateStudent.setEmail("joao@example.com");
-		undergraduateStudent.setPhoneNumber("+55 123 456 789");
-		undergraduateStudent.setNameOfMentee("Maria");
-		undergraduateStudent.setStatus("Ativo");
-		undergraduateStudent.setProjectName("Projeto de Pesquisa XYZ");
-		undergraduateStudent.setTypeOfOrientation("Projeto Final de Curso");
+		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<Student> students = new ArrayList<>();
 
-		PosgraduateStudent posgraduateStudent = new PosgraduateStudent();
+		if (undergraduateStudents != null) {
+			students.addAll(undergraduateStudents);
+		}
 
-		posgraduateStudent.setName("Fernanda");
-		posgraduateStudent.setDateOfEntry(LocalDate.of(2020, 2, 15));
-		posgraduateStudent.setRegistration("789012");
-		posgraduateStudent.setEmail("fernanda@example.com");
-		posgraduateStudent.setPhoneNumber("+55 987 654 321");
-		posgraduateStudent.setStatus("Ativo");
-		posgraduateStudent.setNameOfMentee("Maria");
-		posgraduateStudent.setPosgraduateProgram("Mestrado em Ciência da Computação");
-		posgraduateStudent.setResearchTitle("Algoritmos Quânticos Avançados");
-		posgraduateStudent.setDefenseDate(LocalDate.of(2022, 11, 30));
+		if (posgraduateStudents != null) {
+			students.addAll(posgraduateStudents);
+		}
 
-		studentsTableModel.setStudent(undergraduateStudent);
-		studentsTableModel.setStudent(posgraduateStudent);
-		studentsTableModel.updateTable();
+		studentsTableModel.setStudentList(students);
 	}
 
 	private void editSubject() {
@@ -421,17 +370,11 @@ public class TeacherManager extends JPanel {
 		ComponentDecorator.addPadding(tableContainer, 12);
 		ComponentDecorator.addPadding(contentContainer, 24);
 
-		Paper paper = new Paper();
-		paper.setTitle("Título do Artigo");
-		paper.setAuthors("Autor 1, Autor 2");
-		paper.setPublicationDate(LocalDate.of(2023, 9, 30));
-		paper.setKeywords("palavra-chave1, palavra-chave2");
-		paper.setDescription("Descrição do artigo.");
-		paper.setCategory("Categoria do artigo");
-		paper.setUrl("https://exemplo.com/artigo");
-
-		papersTableModel.setPaper(paper);
-		papersTableModel.updateTable();
+		if (teacher == null)
+			return;
+		ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
+		if (papers != null)
+			papersTableModel.setPaperList(papers);
 	}
 
 	private void editPaper() {
@@ -519,18 +462,12 @@ public class TeacherManager extends JPanel {
 
 		this.add(contentContainer);
 
-		CoordinationActivity activity = new CoordinationActivity();
-
-		activity.setActivityTitle("Reunião de Planejamento");
-		activity.setNameOfPersonResponsible("João Silva");
-		activity.setStartDate(LocalDate.of(2023, 10, 1));
-		activity.setEndDate(LocalDate.of(2023, 10, 5));
-		activity.setPriiority("Alta");
-		activity.setStatus("Em Andamento");
-		activity.setDescription("Reunião para planejar as atividades do próximo trimestre.");
-
-		coordinationActivityTableModel.setCoordinationActivity(activity);
-		coordinationActivityTableModel.updateTable();
+		if (teacher == null)
+			return;
+		ArrayList<CoordinationActivity> coordinationActivities = CoordinationActivityService
+				.getActivitiesByNameOfPersonResponsible(teacher.getName());
+		if (coordinationActivities != null)
+			coordinationActivityTableModel.setCoordinationActivityList(coordinationActivities);
 	}
 
 	private void editCoordinationActivity() {
