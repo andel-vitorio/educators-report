@@ -12,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import app.backend.entities.UndergraduateStudent;
+import app.backend.services.PosgraduateStudentService;
+import app.backend.services.UndergraduateStudentService;
 import app.frontend.components.Button;
 import app.frontend.components.ComboBox;
 import app.frontend.components.Button.ButtonType;
@@ -57,10 +60,17 @@ public class StudentForm extends JFrame {
 		EDIT_STUDENT, ADD_STUDENT, INFO_STUDENT
 	}
 
+	private StudentsTableModel studentsTableModel;
+	private StudentActionType actionType;
+	Student student;
+
 	public StudentForm(StudentsTableModel studentsTableModel, StudentActionType actionType) {
 		super("");
 
 		String title;
+
+		this.studentsTableModel = studentsTableModel;
+		this.actionType = actionType;
 
 		if (actionType == StudentActionType.EDIT_STUDENT)
 			title = "Editar Informações";
@@ -98,15 +108,16 @@ public class StudentForm extends JFrame {
 			Student student) {
 		this(studentsTableModel, actionType);
 
-		if ( actionType == StudentActionType.EDIT_STUDENT )
-				typeStudent.setEnabled(false);
-		
+		if (actionType == StudentActionType.EDIT_STUDENT)
+			typeStudent.setEnabled(false);
+
 		if (student instanceof UndergraduateStudent) {
 			typeStudent.setSelectedIndex(1);
 			ActionEvent event = new ActionEvent(typeStudent, ActionEvent.ACTION_PERFORMED, "Alunos de Graduação");
 			typeStudent.getActionListeners()[0].actionPerformed(event);
 
-			while ( projectNameFormField == null );
+			while (projectNameFormField == null)
+				;
 
 			UndergraduateStudent undergraduateStudent = (UndergraduateStudent) student;
 			projectNameFormField.setText(undergraduateStudent.getProjectName());
@@ -127,6 +138,8 @@ public class StudentForm extends JFrame {
 		phoneNumberFormField.setText(student.getPhoneNumber());
 		nameOfMenteeFormField.setText(student.getNameOfMentee());
 		statusFormField.setText(student.getStatus());
+
+		this.student = student;
 	}
 
 	private JScrollPane getFormContainer() {
@@ -575,7 +588,10 @@ public class StudentForm extends JFrame {
 				undergraduateStudent.setProjectName(projectNameFormField.getText());
 				undergraduateStudent.setTypeOfOrientation(typeOfOrientationFormField.getText());
 
-				System.out.println(undergraduateStudent);
+				if (actionType == StudentActionType.ADD_STUDENT)
+					UndergraduateStudentService.postUndergraduateStudent(undergraduateStudent);
+				else if (actionType == StudentActionType.EDIT_STUDENT)
+					UndergraduateStudentService.updateUndergraduateStudentById(student.getId(), undergraduateStudent);
 
 			} else if ("Aluno de Pós-graduação".equals(selectedType)) {
 				PosgraduateStudent posgraduateStudent = new PosgraduateStudent();
@@ -589,8 +605,26 @@ public class StudentForm extends JFrame {
 				posgraduateStudent.setPosgraduateProgram(posgraduateProgramFormField.getText());
 				posgraduateStudent.setResearchTitle(researchTitleFormField.getText());
 				posgraduateStudent.setDefenseDate(defenseDateDatePicker.getDate());
-				System.out.println(posgraduateStudent);
+
+				if (actionType == StudentActionType.ADD_STUDENT)
+					PosgraduateStudentService.postPosgraduateStudent(posgraduateStudent);
+				else if (actionType == StudentActionType.EDIT_STUDENT)
+					PosgraduateStudentService.updatePosgraduateStudentById(student.getId(), posgraduateStudent);
 			}
+
+			ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudents();
+			ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudents();
+			ArrayList<Student> students = new ArrayList<>();
+
+			if (undergraduateStudents != null) {
+				students.addAll(undergraduateStudents);
+			}
+
+			if (posgraduateStudents != null) {
+				students.addAll(posgraduateStudents);
+			}
+
+			studentsTableModel.setStudentList(students);
 
 		}
 

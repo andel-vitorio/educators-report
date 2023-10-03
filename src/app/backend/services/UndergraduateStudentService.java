@@ -59,8 +59,8 @@ public class UndergraduateStudentService extends Database {
 		}
 	}
 
-	public static List<UndergraduateStudent> getUndergraduateStudents() {
-		List<UndergraduateStudent> undergraduateStudents = new ArrayList<>();
+	public static ArrayList<UndergraduateStudent> getUndergraduateStudents() {
+		ArrayList<UndergraduateStudent> undergraduateStudents = new ArrayList<>();
 
 		try {
 			Statement st = connection.createStatement();

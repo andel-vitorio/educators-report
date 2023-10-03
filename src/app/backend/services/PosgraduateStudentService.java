@@ -60,8 +60,8 @@ public class PosgraduateStudentService extends Database {
 		}
 	}
 
-	public static List<PosgraduateStudent> getPosgraduateStudents() {
-		List<PosgraduateStudent> posgraduateStudents = new ArrayList<>();
+	public static ArrayList<PosgraduateStudent> getPosgraduateStudents() {
+		ArrayList<PosgraduateStudent> posgraduateStudents = new ArrayList<>();
 
 		try {
 			Statement st = connection.createStatement();
