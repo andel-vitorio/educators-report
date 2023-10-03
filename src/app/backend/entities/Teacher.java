@@ -6,12 +6,13 @@ public class Teacher {
 	private String name;
 
 	private LocalDate birthDay;
-	private String indenticatorNumber;
+	private String indentificatorNumber;
 
 	private String email;
 	private String phone;
 	private String trainingArea;
 	private int yearsOfExperience;
+	private int id;
 
 	public void setBirthDay(LocalDate birthDay) {
 		this.birthDay = birthDay;
@@ -21,8 +22,8 @@ public class Teacher {
 		this.email = email;
 	}
 
-	public void setIndenticatorNumber(String indenticatorNumber) {
-		this.indenticatorNumber = indenticatorNumber;
+	public void setIndentificatorNumber(String indenticatorNumber) {
+		this.indentificatorNumber = indenticatorNumber;
 	}
 
 	public void setName(String name) {
@@ -41,6 +42,10 @@ public class Teacher {
 		this.yearsOfExperience = yearsOfExperience;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public LocalDate getBirthDay() {
 		return birthDay;
 	}
@@ -49,8 +54,8 @@ public class Teacher {
 		return email;
 	}
 
-	public String getIndenticatorNumber() {
-		return indenticatorNumber;
+	public String getIndentificatorNumber() {
+		return indentificatorNumber;
 	}
 
 	public String getName() {
@@ -69,12 +74,16 @@ public class Teacher {
 		return yearsOfExperience;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	@Override
 	public String toString() {
 		return "Teacher{" +
 				"name='" + name + '\'' +
 				", birthDay=" + birthDay +
-				", indenticatorNumber='" + indenticatorNumber + '\'' +
+				", indenticatorNumber='" + indentificatorNumber + '\'' +
 				", email='" + email + '\'' +
 				", phone='" + phone + '\'' +
 				", trainingArea='" + trainingArea + '\'' +

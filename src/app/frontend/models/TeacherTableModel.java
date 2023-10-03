@@ -37,7 +37,7 @@ public class TeacherTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Teacher teacher = this.teachers.get(rowIndex);
         switch (columnIndex) {
-            case 0: return teacher.getIndenticatorNumber();
+            case 0: return teacher.getIndentificatorNumber();
             case 1: return teacher.getName();
             default: return null;
         }

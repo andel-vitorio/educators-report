@@ -1,6 +1,8 @@
 
 import javax.swing.*;
 
+import app.backend.services.TeacherService;
+import app.frontend.auth.Login;
 import app.frontend.components.*;
 import app.frontend.screens.activities.CoordinationActivityManager;
 import app.frontend.screens.papers.PapersManager;
@@ -26,16 +28,26 @@ public class App extends JFrame {
 
 	public App() throws IOException {
 		super("Educator's Report");
-		this.init();
-		this.addComponents();
-		// this.setExtendedState(MAXIMIZED_BOTH);
-	}
-
-	void init() {
-
 		ImagesManager.load();
 		FontsManager.load();
 
+		Login login =  new Login();
+
+		login.getObservable().addObserver(action -> {
+			if ( action.equals("confirmed-login") ) {
+				this.init();
+				try {
+					addComponents();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		});
+
+
+	}
+
+	void init() {
 		this.setLayout(new BorderLayout());
 		this.setMinimumSize(new Dimension(1280, 720));
 		this.setPreferredSize(this.getMinimumSize());
@@ -43,6 +55,8 @@ public class App extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(ColorsManager.getBackgroundColor());
 		this.setLocationRelativeTo(null);
+
+		new TeacherService();
 	}
 
 	void addComponents() throws IOException {
@@ -85,7 +99,7 @@ public class App extends JFrame {
 	}
 
 	public static void main(String[] args) throws IOException {
-		App snackBar = new App();
-		snackBar.setVisible(true);
+		App app = new App();
+		app.setVisible(true);
 	}
 }

@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import app.backend.entities.Teacher;
+import app.backend.services.TeacherService;
 import app.frontend.components.Button;
 import app.frontend.components.Button.ButtonType;
 import app.frontend.components.DatePicker;
@@ -39,15 +40,22 @@ public class TeacherForm extends JFrame {
 	private FormField phoneNumberFormField;
 	private FormField trainingAreaFormField;
 	private boolean isEditable = true;
+	private TeacherTableModel teacherTableModel;
+
+	Teacher teacher;
 
 	public enum ActionType {
 		EDIT_TEACHER, ADD_TEACHER, INFO_TEACHER
 	}
 
+	ActionType actionType;
+
 	public TeacherForm(TeacherTableModel teacherTableModel, ActionType actionType) {
 		super("");
 
 		String title;
+		this.actionType = actionType;
+		this.teacherTableModel = teacherTableModel;
 
 		if (actionType == ActionType.EDIT_TEACHER)
 			title = "Editar Informações";
@@ -83,9 +91,10 @@ public class TeacherForm extends JFrame {
 
 	public TeacherForm(TeacherTableModel teacherTableModel, ActionType actionType, Teacher teacher) {
 		this(teacherTableModel, actionType);
+		this.teacher = teacher;
 		birthDayDatePicker.setDate(teacher.getBirthDay());
 		emailFormField.setText(teacher.getEmail());
-		indetificationFormField.setText(teacher.getIndenticatorNumber());
+		indetificationFormField.setText(teacher.getIndentificatorNumber());
 		nameFormField.setText(teacher.getName());
 		phoneNumberFormField.setText(teacher.getPhone());
 		trainingAreaFormField.setText(teacher.getTrainingArea());
@@ -275,16 +284,22 @@ public class TeacherForm extends JFrame {
 	private void confirm() {
 
 		if ( isEditable ) {
-			Teacher teacher = new Teacher();
+
+			if ( actionType == ActionType.ADD_TEACHER )
+				teacher = new Teacher();
+
 			teacher.setBirthDay(birthDayDatePicker.getDate());
 			teacher.setEmail(emailFormField.getText());
-			teacher.setIndenticatorNumber(indetificationFormField.getText());
+			teacher.setIndentificatorNumber(indetificationFormField.getText());
 			teacher.setName(nameFormField.getText());
 			teacher.setPhone(phoneNumberFormField.getText());
 			teacher.setTrainingArea(trainingAreaFormField.getText());
 			teacher.setYearsOfExperience(Integer.parseInt(yearsOfExperienceFormField.getText()));
-	
-			System.out.println(teacher);
+			
+			if ( actionType == ActionType.ADD_TEACHER ) TeacherService.postTeacher(teacher);
+			else if ( actionType == ActionType.EDIT_TEACHER ) TeacherService.updateTeacherById(teacher.getId(), teacher);
+
+			teacherTableModel.setTeachersList(TeacherService.getTeachers());
 		}
 		
 		dispose();

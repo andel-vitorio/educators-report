@@ -10,6 +10,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 import app.backend.entities.Teacher;
+import app.backend.services.TeacherService;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
@@ -108,23 +109,9 @@ public class TeachersManager extends JPanel {
 		ComponentDecorator.addPadding(contentContainer, 24);
 		
 		this.add(contentContainer);
+		ArrayList<Teacher> teachers = TeacherService.getTeachers();
 
-		Teacher teacher = new Teacher();
-
-		teacher.setBirthDay(LocalDate.of(2023, 12, 31));
-		teacher.setEmail("email@asdas");
-		teacher.setIndenticatorNumber("2123");
-		teacher.setName("Andel");
-		teacher.setPhone("12312313");
-		teacher.setTrainingArea("TEste");
-		teacher.setYearsOfExperience(123);
-
-		ArrayList<Teacher> teachers = new ArrayList<>();
-
-		teachers.add(teacher);
-
-		teacherTableModel.setTeachersList(teachers);
-		teacherTableModel.updateTable();
+		if ( teachers != null ) teacherTableModel.setTeachersList(teachers);
 	}
 
 	private void editTeacher() {
@@ -150,7 +137,15 @@ public class TeachersManager extends JPanel {
 	}
 
 	private void deleteTeacher() {
-		System.out.println("Delete Teacher");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
+		else lastSelectedRow = selectedRow; 
+
+		selectedTeacher = teacherTableModel.getTeachersAt(selectedRow);
+
+		TeacherService.deleteTeacherById(selectedTeacher.getId());
+		teacherTableModel.setTeachersList(TeacherService.getTeachers());
 	}
 
 	private void showActivity() {
