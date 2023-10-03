@@ -11,14 +11,14 @@ public class TeacherTableModel extends AbstractTableModel {
 
 		public static final int ACTIONS_BUTTON_COLUMN_INDEX = 2;
     
-    public void setTeachersList(ArrayList<Teacher> costumer) {
+    public void setTeachersList(ArrayList<Teacher> teachers) {
         this.teachers.clear();
-        this.teachers.addAll(costumer);
+        this.teachers.addAll(teachers);
         fireTableDataChanged();
     }
 
-    public void setTeachers(Teacher costumer) {
-        this.teachers.add(costumer);
+    public void setTeachers(Teacher teacher) {
+        this.teachers.add(teacher);
         fireTableDataChanged();
     }
 
