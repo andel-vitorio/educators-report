@@ -10,6 +10,15 @@ public class CoordinationActivity {
 	private String priority;
 	private String status;
 	private String description;
+	private int id;
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
 
 	public void setActivityTitle(String activityTitle) {
 		this.activityTitle = activityTitle;

@@ -10,6 +10,15 @@ public class Student {
 	private String phoneNumber;
 	private String nameOfMentee;
 	private String status;
+	private int id;
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
 
 	public void setDateOfEntry(LocalDate dateOfEntry) {
 		this.dateOfEntry = dateOfEntry;

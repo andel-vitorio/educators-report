@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import app.backend.entities.PosgraduateStudent;
 import app.backend.entities.Student;
 import app.backend.entities.UndergraduateStudent;
+import app.backend.services.PosgraduateStudentService;
+import app.backend.services.UndergraduateStudentService;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
@@ -106,36 +108,20 @@ public class StudentsManager extends JPanel {
 
 		this.add(contentContainer);
 
-		// Criando um objeto UndergraduateStudent
-		UndergraduateStudent undergraduateStudent = new UndergraduateStudent();
+		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudents();
+		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudents();
+		ArrayList<Student> students = new ArrayList<>();
 
-		// Definindo atributos específicos de UndergraduateStudent
-		undergraduateStudent.setName("João");
-		undergraduateStudent.setDateOfEntry(LocalDate.of(2022, 9, 1));
-		undergraduateStudent.setRegistration("123456");
-		undergraduateStudent.setEmail("joao@example.com");
-		undergraduateStudent.setPhoneNumber("+55 123 456 789");
-		undergraduateStudent.setNameOfMentee("Maria");
-		undergraduateStudent.setStatus("Ativo");
-		undergraduateStudent.setProjectName("Projeto de Pesquisa XYZ");
-		undergraduateStudent.setTypeOfOrientation("Projeto Final de Curso");
+		if (undergraduateStudents != null) {
+			students.addAll(undergraduateStudents);
+		}
 
-		PosgraduateStudent posgraduateStudent = new PosgraduateStudent();
+		if (posgraduateStudents != null) {
+			students.addAll(posgraduateStudents);
+		}
 
-		posgraduateStudent.setName("Fernanda");
-		posgraduateStudent.setDateOfEntry(LocalDate.of(2020, 2, 15));
-		posgraduateStudent.setRegistration("789012");
-		posgraduateStudent.setEmail("fernanda@example.com");
-		posgraduateStudent.setPhoneNumber("+55 987 654 321");
-		posgraduateStudent.setStatus("Ativo");
-		posgraduateStudent.setNameOfMentee("Maria");
-		posgraduateStudent.setPosgraduateProgram("Mestrado em Ciência da Computação");
-		posgraduateStudent.setResearchTitle("Algoritmos Quânticos Avançados");
-		posgraduateStudent.setDefenseDate(LocalDate.of(2022, 11, 30));
+		studentsTableModel.setStudentList(students);
 
-		studentsTableModel.setStudent(undergraduateStudent);
-		studentsTableModel.setStudent(posgraduateStudent);
-		studentsTableModel.updateTable();
 	}
 
 	private void editSubject() {
@@ -164,6 +150,32 @@ public class StudentsManager extends JPanel {
 	}
 
 	private void deleteSubject() {
-		System.out.println("Delete Student");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Student student = studentsTableModel.getStudentAt(selectedRow);
+
+		if ( student instanceof UndergraduateStudent )
+			UndergraduateStudentService.deleteUndergraduateStudentById(student.getId());
+		else if ( student instanceof PosgraduateStudent )
+			PosgraduateStudentService.deletePosgraduateStudentById(student.getId());
+
+		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudents();
+		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudents();
+		ArrayList<Student> students = new ArrayList<>();
+
+		if (undergraduateStudents != null) {
+			students.addAll(undergraduateStudents);
+		}
+
+		if (posgraduateStudents != null) {
+			students.addAll(posgraduateStudents);
+		}
+
+		studentsTableModel.setStudentList(students);
 	}
 }

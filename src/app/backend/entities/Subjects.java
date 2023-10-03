@@ -15,6 +15,15 @@ public class Subjects {
 	private int courseLoad;
 	private int credits;
 	private int numberOfVacancies;
+	private int id;
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
 
 	public void setClassroom(String classroom) {
 		this.classroom = classroom;

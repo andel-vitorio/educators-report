@@ -1,7 +1,12 @@
 
 import javax.swing.*;
 
+import app.backend.services.CoordinationActivityService;
+import app.backend.services.PaperService;
+import app.backend.services.PosgraduateStudentService;
+import app.backend.services.SubjectsService;
 import app.backend.services.TeacherService;
+import app.backend.services.UndergraduateStudentService;
 import app.frontend.auth.Login;
 import app.frontend.components.*;
 import app.frontend.screens.activities.CoordinationActivityManager;
@@ -57,6 +62,11 @@ public class App extends JFrame {
 		this.setLocationRelativeTo(null);
 
 		new TeacherService();
+		new CoordinationActivityService();
+		new PaperService();
+		new PosgraduateStudentService();
+		new SubjectsService();
+		new UndergraduateStudentService();
 	}
 
 	void addComponents() throws IOException {

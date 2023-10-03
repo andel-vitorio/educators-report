@@ -10,6 +10,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 import app.backend.entities.Paper;
+import app.backend.services.PaperService;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
@@ -106,17 +107,8 @@ public class PapersManager extends JPanel {
 
 		this.add(contentContainer);
 
-		Paper paper = new Paper();
-		paper.setTitle("Título do Artigo");
-		paper.setAuthors("Autor 1, Autor 2");
-		paper.setPublicationDate(LocalDate.of(2023, 9, 30));
-		paper.setKeywords("palavra-chave1, palavra-chave2");
-		paper.setDescription("Descrição do artigo.");
-		paper.setCategory("Categoria do artigo");
-		paper.setUrl("https://exemplo.com/artigo");
-
-		papersTableModel.setPaper(paper);
-		papersTableModel.updateTable();
+		ArrayList<Paper> papers = PaperService.getPapers();
+		if ( papers != null ) papersTableModel.setPaperList(papers);
 	}
 
 	private void editPaper() {
@@ -144,6 +136,15 @@ public class PapersManager extends JPanel {
 	}
 
 	private void deletePaper() {
-		System.out.println("Delete Paper");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Paper paper = papersTableModel.getPaperAt(selectedRow);
+		PaperService.deletePaperById(paper.getId());
+		papersTableModel.setPaperList(PaperService.getPapers());
 	}
 }

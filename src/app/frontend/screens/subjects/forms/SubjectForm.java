@@ -27,6 +27,7 @@ import res.values.DimensManager;
 import utils.ComponentDecorator;
 
 import app.backend.entities.Subjects;
+import app.backend.services.SubjectsService;
 import app.frontend.components.TimePicker;
 import app.frontend.models.SubjectTableModel;
 
@@ -51,10 +52,17 @@ public class SubjectForm extends JFrame {
 		EDIT_SUBJECT, ADD_SUBJECT, INFO_SUBJECT
 	}
 
-	public SubjectForm(SubjectTableModel teacherTableModel, SubjectActionType actionType) {
+	SubjectTableModel subjectTableModel;
+	SubjectActionType actionType;
+	Subjects subject;
+
+	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType) {
 		super("");
 
 		String title;
+
+		this.subjectTableModel = subjectTableModel;
+		this.actionType = actionType;
 
 		if (actionType == SubjectActionType.EDIT_SUBJECT)
 			title = "Editar Informações";
@@ -101,6 +109,7 @@ public class SubjectForm extends JFrame {
 		creditsFormField.setText(subject.getCredits());
 		numberOfVacanciesFormField.setText(subject.getNumberOfVacancies());
 		classroomFormField.setText(subject.getClassroom());
+		this.subject = subject;
 	}
 
 	private JScrollPane getFormContainer() {
@@ -340,6 +349,10 @@ public class SubjectForm extends JFrame {
 	private void confirm() {
 
 		if (isEditable) {
+
+			if ( actionType == SubjectActionType.ADD_SUBJECT )
+				subject = new Subjects();
+
 			String code = codeFormField.getText();
 			String name = nameFormField.getText();
 			String description = descriptionFormField.getText();
@@ -354,7 +367,6 @@ public class SubjectForm extends JFrame {
 			int credits = Integer.parseInt(creditsFormField.getText());
 			int numberOfVacancies = Integer.parseInt(numberOfVacanciesFormField.getText());
 
-			Subjects subject = new Subjects();
 			subject.setCode(code);
 			subject.setName(name);
 			subject.setDescription(description);
@@ -367,7 +379,10 @@ public class SubjectForm extends JFrame {
 			subject.setNumberOfVacancies(numberOfVacancies);
 			subject.setClassroom(classroom);
 
-			System.out.println(subject);
+			if ( actionType == SubjectActionType.ADD_SUBJECT ) SubjectsService.postSubject(subject);
+			else if ( actionType == SubjectActionType.EDIT_SUBJECT ) SubjectsService.updateSubjectById(subject.getId(), subject);
+
+			subjectTableModel.setSubjectsList(SubjectsService.getSubjects());
 		}
 
 		dispose();

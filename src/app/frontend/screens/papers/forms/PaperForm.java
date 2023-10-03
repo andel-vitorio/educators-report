@@ -27,6 +27,7 @@ import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
 import app.backend.entities.Paper;
+import app.backend.services.PaperService;
 import app.frontend.models.PapersTableModel;
 
 public class PaperForm extends JFrame {
@@ -44,12 +45,21 @@ public class PaperForm extends JFrame {
 
 	public enum PaperActionType {
 		EDIT_PAPER, ADD_PAPER, INFO_PAPER
+	
 	}
+	
+	PapersTableModel papersTableModel;
+	Paper paper;
+	PaperActionType actionType;
 
-	public PaperForm(PapersTableModel paperActionType, PaperActionType actionType) {
+
+	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType) {
 		super("");
 
 		String title;
+
+		this.papersTableModel = papersTableModel;
+		this.actionType = actionType;
 
 		if (actionType == PaperActionType.EDIT_PAPER)
 			title = "Editar Informações";
@@ -92,6 +102,7 @@ public class PaperForm extends JFrame {
 		descriptionFormField.setText(paper.getDescription());
 		categoryFormField.setText(paper.getCategory());
 		urlFormField.setText(paper.getUrl());
+		this.paper = paper;
 	}
 
 	private JScrollPane getFormContainer() {
@@ -283,6 +294,10 @@ public class PaperForm extends JFrame {
 	private void confirm() {
 
 		if (isEditable) {
+
+			if ( actionType == PaperActionType.ADD_PAPER )
+				paper = new Paper();
+
 			String title = titleFormField.getText();
 			String authors = authorsFormField.getText();
 			LocalDate publicationDate = publicationDatePicker.getDate();
@@ -291,7 +306,6 @@ public class PaperForm extends JFrame {
 			String category = categoryFormField.getText();
 			String url = urlFormField.getText();
 
-			Paper paper = new Paper();
 			paper.setTitle(title);
 			paper.setAuthors(authors);
 			paper.setPublicationDate(publicationDate);
@@ -300,7 +314,10 @@ public class PaperForm extends JFrame {
 			paper.setCategory(category);
 			paper.setUrl(url);
 
-			System.out.println(paper);
+			if ( actionType == PaperActionType.ADD_PAPER ) PaperService.postPaper(paper);
+			else if ( actionType == PaperActionType.EDIT_PAPER ) PaperService.updatePaperById(paper.getId(), paper);
+		
+			papersTableModel.setPaperList(PaperService.getPapers());
 		}
 
 		dispose();

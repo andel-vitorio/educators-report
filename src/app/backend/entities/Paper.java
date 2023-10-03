@@ -10,6 +10,15 @@ public class Paper {
 	private String description;
 	private String category;
 	private String url;
+	private int id;
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
 
 	public void setAuthors(String authors) {
 		this.authors = authors;

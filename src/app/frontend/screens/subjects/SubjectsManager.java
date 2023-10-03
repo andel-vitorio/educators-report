@@ -10,6 +10,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 import app.backend.entities.Subjects;
+import app.backend.services.SubjectsService;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.Table;
 import app.frontend.components.TopBar;
@@ -99,22 +100,8 @@ public class SubjectsManager extends JPanel {
 		
 		this.add(contentContainer);
 
-		Subjects subject = new Subjects();
-
-		subject.setCode("MATH101");
-		subject.setName("Matemática Básica");
-		subject.setDescription("Um curso introdutório de matemática.");
-		subject.setStartTime(LocalTime.of(9, 0)); // Horário de início às 9:00
-		subject.setEndTime(LocalTime.of(11, 0));  // Horário de término às 11:00
-		subject.setClassroom("Sala 101");
-		subject.setTeacherName("Professor Smith");
-		subject.setRequirements("Nenhum pré-requisito necessário");
-		subject.setCourseLoad(60);  // 60 horas de carga horária
-		subject.setCredits(3);     // 3 créditos
-		subject.setNumberOfVacancies(30);  // 30 vagas disponíveis
-
-		subjectTableModel.setSubjects(subject);
-		subjectTableModel.updateTable();
+		ArrayList<Subjects> subjects = SubjectsService.getSubjects();
+		if ( subjects != null ) subjectTableModel.setSubjectsList(subjects);
 	}
 
 	private void editSubject() {
@@ -138,6 +125,13 @@ public class SubjectsManager extends JPanel {
 	}
 
 	private void deleteSubject() {
-		System.out.println("Delete Subject");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
+		else lastSelectedRow = selectedRow; 
+
+		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
+		SubjectsService.deleteSubjectById(subject.getId());
+		subjectTableModel.setSubjectsList(SubjectsService.getSubjects());
 	}
 }
