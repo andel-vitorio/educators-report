@@ -1,6 +1,7 @@
 
 import javax.swing.*;
 
+import app.frontend.auth.Login;
 import app.frontend.components.*;
 import app.frontend.screens.activities.CoordinationActivityManager;
 import app.frontend.screens.papers.PapersManager;
@@ -28,7 +29,6 @@ public class App extends JFrame {
 		super("Educator's Report");
 		this.init();
 		this.addComponents();
-		// this.setExtendedState(MAXIMIZED_BOTH);
 	}
 
 	void init() {
@@ -85,7 +85,8 @@ public class App extends JFrame {
 	}
 
 	public static void main(String[] args) throws IOException {
-		App snackBar = new App();
-		snackBar.setVisible(true);
+		App app = new App();
+		app.setVisible(true);
+		new Login();
 	}
 }
