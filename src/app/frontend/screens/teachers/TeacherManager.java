@@ -209,7 +209,7 @@ public class TeacherManager extends JPanel {
 
 		teacher.setBirthDay(LocalDate.of(2023, 12, 31));
 		teacher.setEmail("email@asdas");
-		teacher.setIndenticatorNumber("2123");
+		teacher.setIndentificatorNumber("2123");
 		teacher.setName("Andel");
 		teacher.setPhone("12312313");
 		teacher.setTrainingArea("TEste");
