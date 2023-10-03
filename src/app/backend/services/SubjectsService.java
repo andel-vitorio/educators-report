@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import app.backend.Database;
-import app.backend.entities.Subjects;
+import app.backend.entities.*;
 
 public class SubjectsService extends Database {
 
@@ -66,6 +66,37 @@ public class SubjectsService extends Database {
 		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM subjects");
+
+			while (rs.next()) {
+				Subjects subject = new Subjects();
+				subject.setCode(rs.getString("code"));
+				subject.setName(rs.getString("name"));
+				subject.setDescription(rs.getString("description"));
+				subject.setStartTime(rs.getTime("startTime").toLocalTime());
+				subject.setEndTime(rs.getTime("endTime").toLocalTime());
+				subject.setClassroom(rs.getString("classroom"));
+				subject.setTeacherName(rs.getString("teacherName"));
+				subject.setRequirements(rs.getString("requirements"));
+				subject.setCourseLoad(rs.getInt("courseLoad"));
+				subject.setCredits(rs.getInt("credits"));
+				subject.setNumberOfVacancies(rs.getInt("numberOfVacancies"));
+				subject.setId(rs.getInt("id"));
+				subjects.add(subject);
+			}
+
+			return subjects;
+		} catch (SQLException e) {
+			System.out.println("Erro ao obter informações sobre as disciplinas");
+			return null;
+		}
+	}
+
+	public static ArrayList<Subjects> getSubjectsByTeacher(Teacher teacher) {
+		ArrayList<Subjects> subjects = new ArrayList<>();
+
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM subjects WHERE teacherName=" + teacher.getName());
 
 			while (rs.next()) {
 				Subjects subject = new Subjects();

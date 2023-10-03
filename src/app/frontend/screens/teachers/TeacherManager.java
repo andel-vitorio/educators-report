@@ -9,12 +9,8 @@ import java.awt.geom.RoundRectangle2D;
 
 import java.util.ArrayList;
 
-import app.backend.entities.CoordinationActivity;
-import app.backend.entities.Paper;
-import app.backend.entities.PosgraduateStudent;
-import app.backend.entities.Student;
-import app.backend.entities.Teacher;
-import app.backend.entities.UndergraduateStudent;
+import app.backend.entities.*;
+import app.backend.services.*;
 import app.frontend.components.ActionsButtons;
 import app.frontend.components.ComboBox;
 import app.frontend.components.Table;
@@ -57,6 +53,12 @@ public class TeacherManager extends JPanel {
 	private int lastSelectedRow = 0;
 	private ComboBox comboBox;
 	private JPanel contentContainer;
+	private Teacher teacher;
+	
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+	
 
 	public TeacherManager() {
 		this.setLayout(new BorderLayout(0, 0));
@@ -172,23 +174,23 @@ public class TeacherManager extends JPanel {
 
 		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> {
-			showTeacherInfo();
+			showSubjectInfo();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> {
-			editTeacher();
+			editSubject();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> {
-			deleteTeacher();
+			deleteSubject();
 		}));
 
-		teacherTableModel = new TeacherTableModel();
-		table = new Table(teacherTableModel);
+		subjectTableModel = new SubjectTableModel();
+		table = new Table(subjectTableModel);
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
 		CellEditor actionsButtonCellEditor = new CellEditor(actionsButtons);
 		CellRenderer actionsButtonCellRenderer = new CellRenderer(actionsButtons);
 
-		table.setCustomColumn(TeacherTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor,
+		table.setCustomColumn(SubjectTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor,
 				actionsButtonCellRenderer);
 		table.setColumnWidth(0, 200);
 		table.setColumnWidth(2, 200);
@@ -204,49 +206,10 @@ public class TeacherManager extends JPanel {
 		ComponentDecorator.addPadding(table, 16, 0, 0, 0);
 		ComponentDecorator.addPadding(tableContainer, 12);
 		ComponentDecorator.addPadding(contentContainer, 24);
-
-		Teacher teacher = new Teacher();
-
-		teacher.setBirthDay(LocalDate.of(2023, 12, 31));
-		teacher.setEmail("email@asdas");
-		teacher.setIndentificatorNumber("2123");
-		teacher.setName("Andel");
-		teacher.setPhone("12312313");
-		teacher.setTrainingArea("TEste");
-		teacher.setYearsOfExperience(123);
-
-		ArrayList<Teacher> teachers = new ArrayList<>();
-
-		teachers.add(teacher);
-
-		teacherTableModel.setTeachersList(teachers);
-		teacherTableModel.updateTable();
-	}
-
-	private void editTeacher() {
-		int selectedRow = table.getComponent().getSelectedRow();
-
-		if (selectedRow == -1)
-			selectedRow = lastSelectedRow;
-		else
-			lastSelectedRow = selectedRow;
-
-		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
-
-		new TeacherForm(teacherTableModel, ActionType.EDIT_TEACHER, teacher);
-	}
-
-	private void showTeacherInfo() {
-		int selectedRow = table.getComponent().getSelectedRow();
-
-		if (selectedRow == -1)
-			selectedRow = lastSelectedRow;
-		else
-			lastSelectedRow = selectedRow;
-
-		Teacher teacher = teacherTableModel.getTeachersAt(selectedRow);
-
-		new TeacherForm(teacherTableModel, ActionType.INFO_TEACHER, teacher);
+		
+		if ( teacher == null ) return;
+		ArrayList<Subjects> subjects = SubjectsService.getSubjectsByTeacher(teacher);
+		if ( subjects != null ) subjectTableModel.setSubjectsList(subjects);
 	}
 
 	private void deleteTeacher() {
