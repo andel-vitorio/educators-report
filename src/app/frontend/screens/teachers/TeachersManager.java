@@ -22,19 +22,27 @@ import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
+import utils.Observable;
+
 import java.time.*;
 
 public class TeachersManager extends JPanel {
 
 	private static final String TITLE_WINDOW = "Gerenciamento de Professores";
+	public static final String ACTIVITY_TEACHER_WINDOWS_ID = "activity-teacher-windows";
 
 	private TopBar topBar;
 	private Table table;
 	private TeacherTableModel teacherTableModel;
 	private int lastSelectedRow = 0;
 
+	private Teacher selectedTeacher;
+
+	private Observable observable;
+
 	public TeachersManager() {
 		this.setLayout(new BorderLayout(0, 0));
+		observable = new Observable();
 
 		topBar = new TopBar(TITLE_WINDOW);
 		topBar.setBackground(ColorsManager.getOnBackgroundColor());
@@ -79,6 +87,7 @@ public class TeachersManager extends JPanel {
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> { showTeacherInfo(); }));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> { editTeacher(); }));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> { deleteTeacher(); }));
+		buttonInfos.add(new ButtonInfo("", ImagesManager.getActivityIcon(), e -> { showActivity(); }));
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
 		CellEditor actionsButtonCellEditor = new CellEditor(actionsButtons);
@@ -86,7 +95,7 @@ public class TeachersManager extends JPanel {
 
 		table.setCustomColumn(TeacherTableModel.ACTIONS_BUTTON_COLUMN_INDEX, actionsButtonCellEditor, actionsButtonCellRenderer);
 		table.setColumnWidth(0, 200);
-		table.setColumnWidth(2, 120);
+		table.setColumnWidth(2, 160);
 
 		tableContainer.setLayout(new BorderLayout());
 		tableContainer.add(table, BorderLayout.CENTER);
@@ -142,5 +151,24 @@ public class TeachersManager extends JPanel {
 
 	private void deleteTeacher() {
 		System.out.println("Delete Teacher");
+	}
+
+	private void showActivity() {
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if ( selectedRow == -1 ) selectedRow = lastSelectedRow;
+		else lastSelectedRow = selectedRow; 
+
+		selectedTeacher = teacherTableModel.getTeachersAt(selectedRow);
+		
+		observable.notifyObservers(ACTIVITY_TEACHER_WINDOWS_ID);
+	}
+
+	public Teacher getSelectedTeacher() {
+		return selectedTeacher;
+	}
+
+	public Observable getObservable() {
+		return observable;
 	}
 }
