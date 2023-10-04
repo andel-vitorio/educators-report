@@ -745,7 +745,7 @@ public class ReportIndividual extends JFrame {
 
 		activityTitleFormField.setText(activity.getActivityTitle());
 		nameOfPersonResponsibleFormField.setText(activity.getNameOfPersonResponsible());
-		priorityFormField.setText(activity.getPriiority());
+		priorityFormField.setText(activity.getPriority());
 		statusFormField.setText(activity.getStatus());
 		descriptionFormField.setText(activity.getDescription());
 		startDatePicker.setDate(activity.getStartDate());

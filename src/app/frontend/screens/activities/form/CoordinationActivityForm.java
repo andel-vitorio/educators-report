@@ -123,7 +123,7 @@ public class CoordinationActivityForm extends JFrame {
 
 		activityTitleFormField.setText(activity.getActivityTitle());
 		nameOfPersonResponsibleFormField.setText(activity.getNameOfPersonResponsible());
-		priorityFormField.setText(activity.getPriiority());
+		priorityFormField.setText(activity.getPriority());
 		statusFormField.setText(activity.getStatus());
 		descriptionFormField.setText(activity.getDescription());
 		startDatePicker.setDate(activity.getStartDate());
@@ -325,7 +325,7 @@ public class CoordinationActivityForm extends JFrame {
 
 			coordinationActivity.setActivityTitle(activityTitle);
 			coordinationActivity.setNameOfPersonResponsible(nameOfPersonResponsible);
-			coordinationActivity.setPriiority(priority);
+			coordinationActivity.setPriority(priority);
 			coordinationActivity.setStatus(status);
 			coordinationActivity.setDescription(description);
 			coordinationActivity.setStartDate(startDate);
