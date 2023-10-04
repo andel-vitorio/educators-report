@@ -67,7 +67,7 @@ public class CoordinationActivityService extends Database {
 				activity.setNameOfPersonResponsible(rs.getString("nameOfPersonResponsible"));
 				activity.setStartDate(rs.getDate("startDate").toLocalDate());
 				activity.setEndDate(rs.getDate("endDate").toLocalDate());
-				activity.setPriiority(rs.getString("priority"));
+				activity.setPriority(rs.getString("priority"));
 				activity.setStatus(rs.getString("status"));
 				activity.setDescription(rs.getString("description"));
 				activity.setId(rs.getInt("id"));
@@ -94,7 +94,7 @@ public class CoordinationActivityService extends Database {
             activity.setNameOfPersonResponsible(rs.getString("nameOfPersonResponsible"));
             activity.setStartDate(rs.getDate("startDate").toLocalDate());
             activity.setEndDate(rs.getDate("endDate").toLocalDate());
-            activity.setPriiority(rs.getString("priority"));
+            activity.setPriority(rs.getString("priority"));
             activity.setStatus(rs.getString("status"));
             activity.setDescription(rs.getString("description"));
             activity.setId(rs.getInt("id"));
@@ -117,7 +117,7 @@ public class CoordinationActivityService extends Database {
 							+ activity.getNameOfPersonResponsible() + "', '"
 							+ activity.getStartDate() + "', '"
 							+ activity.getEndDate() + "', '"
-							+ activity.getPriiority() + "', '"
+							+ activity.getPriority() + "', '"
 							+ activity.getStatus() + "', '"
 							+ activity.getDescription()
 							+ "')");
@@ -147,7 +147,7 @@ public class CoordinationActivityService extends Database {
 							+ " nameOfPersonResponsible='" + activity.getNameOfPersonResponsible() + "', "
 							+ " startDate='" + activity.getStartDate() + "', "
 							+ " endDate='" + activity.getEndDate() + "', "
-							+ " priority='" + activity.getPriiority() + "', "
+							+ " priority='" + activity.getPriority() + "', "
 							+ " status='" + activity.getStatus() + "', "
 							+ " description='" + activity.getDescription() + "'"
 							+ " WHERE id=" + id);
