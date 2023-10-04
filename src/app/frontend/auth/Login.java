@@ -27,6 +27,10 @@ import utils.ComponentDecorator;
 import utils.Observable;
 import app.backend.Database;
 
+/**
+ * Janela de autenticação para acesso ao sistema.
+ * Esta classe representa a tela de login onde o usuário insere suas credenciais.
+ */
 public class Login extends JFrame {
 
 	private Container container;
@@ -37,7 +41,10 @@ public class Login extends JFrame {
 
 	private Observable observable = new Observable();
 
-
+	/**
+     * Construtor padrão para a tela de login.
+     * Inicializa a tela de autenticação com os componentes necessários.
+     */
 	public Login() {
 		super("Autenticação");
 
@@ -62,7 +69,11 @@ public class Login extends JFrame {
 
 		setVisible(true);
 	}
-
+	/**
+     * Retorna um JScrollPane contendo o formulário de autenticação.
+     * 
+     * @return JScrollPane - painel de rolagem contendo os campos do formulário.
+     */
 	private JScrollPane getFormContainer() {
 		JPanel formContainer = new JPanel(new GridBagLayout());
 		ComponentDecorator.addPadding(formContainer, 0, 24);
@@ -117,6 +128,12 @@ public class Login extends JFrame {
 		return scrollPane;
 	}
 
+	/**
+     * Cria um JLabel estilizado para exibir uma seção do formulário.
+     * 
+     * @param text O texto da seção.
+     * @return JLabel - label estilizado para a seção.
+     */
 	private JLabel getSectionLabel(String text) {
 		JLabel label = new JLabel(text, JLabel.LEFT);
 		label.setFont(FontsManager.getFont(FontType.SEMI_BOLD, DimensManager.getSectionLabelFontsize()));
@@ -125,6 +142,11 @@ public class Login extends JFrame {
 		return label;
 	}
 
+	/**
+     * Retorna um JPanel contendo os botões da tela de login.
+     * 
+     * @return JPanel - painel contendo os botões.
+     */
 	private JPanel getButtonsContainer() {
 		JPanel buttonsContainer = new JPanel();
 		buttonsContainer.setLayout(new FlowLayout(FlowLayout.RIGHT, 24, 0));
@@ -165,12 +187,22 @@ public class Login extends JFrame {
 		return buttonsContainer;
 	}
 
+	/**
+     * Método para confirmar a autenticação.
+     * Inicia uma nova conexão com o banco de dados usando as credenciais fornecidas.
+     * Notifica os observadores e fecha a janela de login após a confirmação.
+     */
 	private void confirm() {
 		new Database(userFormField.getText(), passwordFormField.getText());
 		observable.notifyObservers("confirmed-login");
 		dispose();
 	}
 
+	/**
+     * Obtém o observável associado à tela de login.
+     * 
+     * @return Observable - observável que notifica mudanças.
+     */
 	public Observable getObservable() {
 		return observable;
 	}
