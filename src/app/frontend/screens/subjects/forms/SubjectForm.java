@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import res.values.DimensManager;
 import utils.ComponentDecorator;
 
 import app.backend.entities.Subjects;
+import app.backend.entities.Teacher;
 import app.backend.services.SubjectsService;
 import app.frontend.components.TimePicker;
 import app.frontend.models.SubjectTableModel;
@@ -47,6 +49,8 @@ public class SubjectForm extends JFrame {
 	private FormField courseLoadFormField;
 	private FormField creditsFormField;
 	private FormField numberOfVacanciesFormField;
+
+	Teacher teacher;
 
 	public enum SubjectActionType {
 		EDIT_SUBJECT, ADD_SUBJECT, INFO_SUBJECT
@@ -94,6 +98,21 @@ public class SubjectForm extends JFrame {
 		container.add(getButtonsContainer(), BorderLayout.PAGE_END);
 
 		setVisible(true);
+	}
+
+	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Teacher teacher) {
+		this(subjectTableModel, actionType);
+		this.teacher = teacher;
+		teacherNameFormField.setText(teacher.getName());
+		teacherNameFormField.setEditable(false);
+	}
+	
+	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Subjects subject,
+			Teacher teacher) {
+		this(subjectTableModel, actionType, subject);
+		this.teacher = teacher;
+		teacherNameFormField.setText(teacher.getName());
+		teacherNameFormField.setEditable(false);
 	}
 
 	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Subjects subject) {
@@ -350,7 +369,7 @@ public class SubjectForm extends JFrame {
 
 		if (isEditable) {
 
-			if ( actionType == SubjectActionType.ADD_SUBJECT )
+			if (actionType == SubjectActionType.ADD_SUBJECT)
 				subject = new Subjects();
 
 			String code = codeFormField.getText();
@@ -379,10 +398,18 @@ public class SubjectForm extends JFrame {
 			subject.setNumberOfVacancies(numberOfVacancies);
 			subject.setClassroom(classroom);
 
-			if ( actionType == SubjectActionType.ADD_SUBJECT ) SubjectsService.postSubject(subject);
-			else if ( actionType == SubjectActionType.EDIT_SUBJECT ) SubjectsService.updateSubjectById(subject.getId(), subject);
+			if (actionType == SubjectActionType.ADD_SUBJECT)
+				SubjectsService.postSubject(subject);
+			else if (actionType == SubjectActionType.EDIT_SUBJECT)
+				SubjectsService.updateSubjectById(subject.getId(), subject);
 
-			subjectTableModel.setSubjectsList(SubjectsService.getSubjects());
+			if (teacher == null)
+				subjectTableModel.setSubjectsList(SubjectsService.getSubjects());
+			else {
+				ArrayList<Subjects> subjects = SubjectsService.getSubjectsByTeacherName(teacher.getName());
+				if (subjects != null)
+					subjectTableModel.setSubjectsList(subjects);
+			}
 		}
 
 		dispose();

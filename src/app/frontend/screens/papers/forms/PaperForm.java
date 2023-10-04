@@ -27,8 +27,11 @@ import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
 import app.backend.entities.Paper;
+import app.backend.entities.Teacher;
 import app.backend.services.PaperService;
 import app.frontend.models.PapersTableModel;
+
+import java.util.*;
 
 public class PaperForm extends JFrame {
 
@@ -43,15 +46,21 @@ public class PaperForm extends JFrame {
 	private FormField categoryFormField;
 	private FormField urlFormField;
 
+	Teacher teacher;
+
 	public enum PaperActionType {
 		EDIT_PAPER, ADD_PAPER, INFO_PAPER
-	
 	}
 	
 	PapersTableModel papersTableModel;
 	Paper paper;
 	PaperActionType actionType;
 
+	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Teacher teacher) {
+		this(papersTableModel, actionType);
+		this.teacher = teacher;
+		authorsFormField.setText(authorsFormField.getText() + teacher.getName() + "; ");
+	}
 
 	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType) {
 		super("");
@@ -91,6 +100,11 @@ public class PaperForm extends JFrame {
 		container.add(getButtonsContainer(), BorderLayout.PAGE_END);
 
 		setVisible(true);
+	}
+
+	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Paper paper, Teacher teacher) {
+		this(papersTableModel, actionType, paper);
+		this.teacher = teacher;
 	}
 
 	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Paper paper) {
@@ -317,8 +331,13 @@ public class PaperForm extends JFrame {
 			if ( actionType == PaperActionType.ADD_PAPER ) PaperService.postPaper(paper);
 			else if ( actionType == PaperActionType.EDIT_PAPER ) PaperService.updatePaperById(paper.getId(), paper);
 		
-			papersTableModel.setPaperList(PaperService.getPapers());
-		}
+			if (teacher == null) papersTableModel.setPaperList(PaperService.getPapers());
+			else {
+				ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
+				if (papers != null)
+					papersTableModel.setPaperList(papers);
+				}
+			}
 
 		dispose();
 	}

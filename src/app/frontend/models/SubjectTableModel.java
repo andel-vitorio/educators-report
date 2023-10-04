@@ -12,14 +12,14 @@ public class SubjectTableModel extends AbstractTableModel {
 
 	public static final int ACTIONS_BUTTON_COLUMN_INDEX = 4;
 
-	public void setSubjectsList(ArrayList<Subjects> costumer) {
+	public void setSubjectsList(ArrayList<Subjects> subjects) {
 		this.subjects.clear();
-		this.subjects.addAll(costumer);
+		this.subjects.addAll(subjects);
 		fireTableDataChanged();
 	}
 
-	public void setSubjects(Subjects costumer) {
-		this.subjects.add(costumer);
+	public void setSubjects(Subjects subject) {
+		this.subjects.add(subject);
 		fireTableDataChanged();
 	}
 
