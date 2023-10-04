@@ -104,7 +104,7 @@ public class App extends JFrame {
 		
 		SideBar sideBar = new SideBar(260, 720);
 		sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
-				.setHeader("Educator's Report", "Versão 1.0", ImagesManager.getLogo())
+				.setHeader("RIT Systems", "Versão 1.0", ImagesManager.getLogo())
 				.setNavigation(navigation);
 
 		add(sideBar.getComponent(), BorderLayout.LINE_START);
