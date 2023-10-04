@@ -61,6 +61,8 @@ public class CoordinationActivityForm extends JFrame {
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType, Teacher teacher) {
 		this(coordinationActivityTableModel, actionType);
 		this.teacher = teacher;
+		nameOfPersonResponsibleFormField.setText(teacher.getName());
+		nameOfPersonResponsibleFormField.setEditable(false);
 	}
 
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType) {
@@ -107,6 +109,10 @@ public class CoordinationActivityForm extends JFrame {
 			CoordinationActivity activity, Teacher teacher) {
 				this(coordinationActivityTableModel, actionType, activity);
 				this.teacher = teacher;
+				if ( teacher != null ) {
+					nameOfPersonResponsibleFormField.setText(teacher.getName());
+					nameOfPersonResponsibleFormField.setEditable(false);
+				}
 			}
 
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType,
@@ -155,6 +161,7 @@ public class CoordinationActivityForm extends JFrame {
 		constraints.gridy = y++;
 		nameOfPersonResponsibleFormField = new FormField("Nome Completo do Rensponsável", 0);
 		nameOfPersonResponsibleFormField.setEditable(isEditable);
+
 		formContainer.add(nameOfPersonResponsibleFormField, constraints);
 
 		constraints.gridwidth = 1;

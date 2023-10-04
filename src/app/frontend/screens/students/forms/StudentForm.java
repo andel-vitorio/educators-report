@@ -154,6 +154,8 @@ public class StudentForm extends JFrame {
 			Student student, Teacher teacher) {
 		this(studentsTableModel, actionType, student);
 		this.teacher = teacher;
+		nameOfMenteeFormField.setText(teacher.getName());
+		nameOfMenteeFormField.setEditable(false);
 	}
 
 	private JScrollPane getFormContainer() {
@@ -317,6 +319,12 @@ public class StudentForm extends JFrame {
 					constraints.insets = new Insets(0, 0, 16, 12);
 					nameOfMenteeFormField = new FormField("Nome do Orientador", 0);
 					nameOfMenteeFormField.setEditable(isEditable);
+
+					if ( teacher != null ) {
+						nameOfMenteeFormField.setText(teacher.getName());
+						nameOfMenteeFormField.setEditable(false);
+					}
+					
 					formContainer.add(nameOfMenteeFormField, constraints);
 
 					constraints.gridwidth = 2;
@@ -433,6 +441,12 @@ public class StudentForm extends JFrame {
 					constraints.insets = new Insets(0, 0, 16, 12);
 					nameOfMenteeFormField = new FormField("Nome do Orientador", 0);
 					nameOfMenteeFormField.setEditable(isEditable);
+					
+					if ( teacher != null ) {
+						nameOfMenteeFormField.setText(teacher.getName());
+						nameOfMenteeFormField.setEditable(false);
+					}
+
 					formContainer.add(nameOfMenteeFormField, constraints);
 
 					constraints.gridwidth = 2;

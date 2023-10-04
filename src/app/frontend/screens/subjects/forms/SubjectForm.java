@@ -103,12 +103,16 @@ public class SubjectForm extends JFrame {
 	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Teacher teacher) {
 		this(subjectTableModel, actionType);
 		this.teacher = teacher;
+		teacherNameFormField.setText(teacher.getName());
+		teacherNameFormField.setEditable(false);
 	}
 	
 	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Subjects subject,
 			Teacher teacher) {
 		this(subjectTableModel, actionType, subject);
 		this.teacher = teacher;
+		teacherNameFormField.setText(teacher.getName());
+		teacherNameFormField.setEditable(false);
 	}
 
 	public SubjectForm(SubjectTableModel subjectTableModel, SubjectActionType actionType, Subjects subject) {

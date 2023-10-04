@@ -59,6 +59,7 @@ public class PaperForm extends JFrame {
 	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Teacher teacher) {
 		this(papersTableModel, actionType);
 		this.teacher = teacher;
+		authorsFormField.setText(authorsFormField.getText() + teacher.getName() + "; ");
 	}
 
 	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType) {
