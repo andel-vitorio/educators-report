@@ -73,23 +73,23 @@ public class TeacherManager extends JPanel {
 
 				switch (selectedOption) {
 					case 0: {
-						new SubjectForm(subjectTableModel, SubjectActionType.ADD_SUBJECT);
+						new SubjectForm(subjectTableModel, SubjectActionType.ADD_SUBJECT, teacher);
 						break;
 					}
 
 					case 1: {
-						new StudentForm(studentsTableModel, StudentActionType.ADD_STUDENT);
+						new StudentForm(studentsTableModel, StudentActionType.ADD_STUDENT, teacher);
 						break;
 					}
 
 					case 2: {
-						new PaperForm(papersTableModel, PaperActionType.ADD_PAPER);
+						new PaperForm(papersTableModel, PaperActionType.ADD_PAPER, teacher);
 						break;
 					}
 
 					case 3: {
 						new CoordinationActivityForm(coordinationActivityTableModel,
-								CoordinationActivityActionType.ADD_ACTIVITY);
+								CoordinationActivityActionType.ADD_ACTIVITY, teacher);
 						break;
 					}
 
@@ -120,7 +120,7 @@ public class TeacherManager extends JPanel {
 
 					case 1: {
 						contentContainer.removeAll();
-						showStudents();
+						showStudentsTable();
 						break;
 					}
 
@@ -214,7 +214,50 @@ public class TeacherManager extends JPanel {
 			subjectTableModel.setSubjectsList(subjects);
 	}
 
-	private void showStudents() {
+	private void editSubject() {
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
+		new SubjectForm(subjectTableModel, SubjectActionType.EDIT_SUBJECT, subject, teacher);
+	}
+
+	private void showSubjectInfo() {
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
+		new SubjectForm(subjectTableModel, SubjectActionType.INFO_SUBJECT, subject);
+	}
+
+	private void deleteSubject() {
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Subjects subject = subjectTableModel.getSubjectsAt(selectedRow);
+		SubjectsService.deleteSubjectById(subject.getId());
+		subjectTableModel.setSubjectsList(SubjectsService.getSubjects());
+
+		if (teacher == null)
+			return;
+		ArrayList<Subjects> subjects = SubjectsService.getSubjectsByTeacherName(teacher.getName());
+		if (subjects != null)
+			subjectTableModel.setSubjectsList(subjects);
+	}
+
+	private void showStudentsTable() {
 
 		JPanel tableContainer = new JPanel() {
 			@Override
@@ -240,13 +283,13 @@ public class TeacherManager extends JPanel {
 
 		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getInfoIcon(), e -> {
-			showSubjectInfo();
+			showStudentInfo();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getEditIcon(), e -> {
-			editSubject();
+			editStudent();
 		}));
 		buttonInfos.add(new ButtonInfo("", ImagesManager.getDeleteIcon(), e -> {
-			deleteSubject();
+			deleteStudent();
 		}));
 
 		ActionsButtons actionsButtons = new ActionsButtons(buttonInfos);
@@ -271,8 +314,10 @@ public class TeacherManager extends JPanel {
 		if (teacher == null)
 			return;
 
-		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudentsByNameOfMentee(teacher.getName());
-		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService
+				.getUndergraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService
+				.getPosgraduateStudentsByNameOfMentee(teacher.getName());
 		ArrayList<Student> students = new ArrayList<>();
 
 		if (undergraduateStudents != null) {
@@ -286,7 +331,7 @@ public class TeacherManager extends JPanel {
 		studentsTableModel.setStudentList(students);
 	}
 
-	private void editSubject() {
+	private void editStudent() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if (selectedRow == -1)
@@ -295,10 +340,10 @@ public class TeacherManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		Student student = studentsTableModel.getStudentAt(selectedRow);
-		new StudentForm(studentsTableModel, StudentActionType.EDIT_STUDENT, student);
+		new StudentForm(studentsTableModel, StudentActionType.EDIT_STUDENT, student, teacher);
 	}
 
-	private void showSubjectInfo() {
+	private void showStudentInfo() {
 		int selectedRow = table.getComponent().getSelectedRow();
 
 		if (selectedRow == -1)
@@ -309,10 +354,59 @@ public class TeacherManager extends JPanel {
 		Student student = studentsTableModel.getStudentAt(selectedRow);
 		new StudentForm(studentsTableModel, StudentActionType.INFO_STUDENT, student);
 
+		if (teacher == null)
+			return;
+
+		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService
+				.getUndergraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService
+				.getPosgraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<Student> students = new ArrayList<>();
+
+		if (undergraduateStudents != null) {
+			students.addAll(undergraduateStudents);
+		}
+
+		if (posgraduateStudents != null) {
+			students.addAll(posgraduateStudents);
+		}
+
+		studentsTableModel.setStudentList(students);
 	}
 
-	private void deleteSubject() {
-		System.out.println("Delete Student");
+	private void deleteStudent() {
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Student student = studentsTableModel.getStudentAt(selectedRow);
+
+		if (student instanceof UndergraduateStudent)
+			UndergraduateStudentService.deleteUndergraduateStudentById(student.getId());
+		else if (student instanceof PosgraduateStudent)
+			PosgraduateStudentService.deletePosgraduateStudentById(student.getId());
+
+		if (teacher == null)
+			return;
+
+		ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService
+				.getUndergraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService
+				.getPosgraduateStudentsByNameOfMentee(teacher.getName());
+		ArrayList<Student> students = new ArrayList<>();
+
+		if (undergraduateStudents != null) {
+			students.addAll(undergraduateStudents);
+		}
+
+		if (posgraduateStudents != null) {
+			students.addAll(posgraduateStudents);
+		}
+
+		studentsTableModel.setStudentList(students);
 	}
 
 	public void showPapers() {
@@ -386,7 +480,13 @@ public class TeacherManager extends JPanel {
 			lastSelectedRow = selectedRow;
 
 		Paper paper = papersTableModel.getPaperAt(selectedRow);
-		new PaperForm(papersTableModel, PaperActionType.EDIT_PAPER, paper);
+		new PaperForm(papersTableModel, PaperActionType.EDIT_PAPER, paper, teacher);
+
+		if (teacher == null)
+			return;
+		ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
+		if (papers != null)
+			papersTableModel.setPaperList(papers);
 	}
 
 	private void showPaperInfo() {
@@ -399,10 +499,30 @@ public class TeacherManager extends JPanel {
 
 		Paper paper = papersTableModel.getPaperAt(selectedRow);
 		new PaperForm(papersTableModel, PaperActionType.INFO_PAPER, paper);
+
+		if (teacher == null)
+			return;
+		ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
+		if (papers != null)
+			papersTableModel.setPaperList(papers);
 	}
 
 	private void deletePaper() {
-		System.out.println("Delete Subject");
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		Paper paper = papersTableModel.getPaperAt(selectedRow);
+		PaperService.deletePaperById(paper.getId());
+
+		if (teacher == null)
+			return;
+		ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
+		if (papers != null)
+			papersTableModel.setPaperList(papers);
 	}
 
 	private void showActivity() {
@@ -480,7 +600,7 @@ public class TeacherManager extends JPanel {
 
 		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
 		new CoordinationActivityForm(coordinationActivityTableModel,
-				CoordinationActivityActionType.EDIT_ACTIVITY, activity);
+				CoordinationActivityActionType.EDIT_ACTIVITY, activity, teacher);
 	}
 
 	private void showCoordinationActivityInfo() {
@@ -494,9 +614,33 @@ public class TeacherManager extends JPanel {
 		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
 		new CoordinationActivityForm(coordinationActivityTableModel,
 				CoordinationActivityActionType.EDIT_ACTIVITY, activity);
+
+		if (teacher == null)
+			return;
+		ArrayList<CoordinationActivity> coordinationActivities = CoordinationActivityService
+				.getActivitiesByNameOfPersonResponsible(teacher.getName());
+		if (coordinationActivities != null)
+			coordinationActivityTableModel.setCoordinationActivityList(coordinationActivities);
 	}
 
 	private void deleteCoordinationActivity() {
-		System.out.println("Delete Activity");
+
+		int selectedRow = table.getComponent().getSelectedRow();
+
+		if (selectedRow == -1)
+			selectedRow = lastSelectedRow;
+		else
+			lastSelectedRow = selectedRow;
+
+		CoordinationActivity activity = coordinationActivityTableModel.getCoordinationActivityAt(selectedRow);
+
+		CoordinationActivityService.deleteCoordinationActivityById(activity.getId());
+
+		if (teacher == null)
+			return;
+		ArrayList<CoordinationActivity> coordinationActivities = CoordinationActivityService
+				.getActivitiesByNameOfPersonResponsible(teacher.getName());
+		if (coordinationActivities != null)
+			coordinationActivityTableModel.setCoordinationActivityList(coordinationActivities);
 	}
 }

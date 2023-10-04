@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import app.backend.entities.UndergraduateStudent;
 import app.backend.services.PosgraduateStudentService;
 import app.backend.services.UndergraduateStudentService;
+import app.backend.entities.Teacher;
 import app.frontend.components.Button;
 import app.frontend.components.ComboBox;
 import app.frontend.components.Button.ButtonType;
@@ -55,6 +56,8 @@ public class StudentForm extends JFrame {
 	private DatePicker defenseDateDatePicker;
 
 	private ComboBox typeStudent;
+
+	Teacher teacher;
 
 	public enum StudentActionType {
 		EDIT_STUDENT, ADD_STUDENT, INFO_STUDENT
@@ -104,6 +107,11 @@ public class StudentForm extends JFrame {
 		setVisible(true);
 	}
 
+	public StudentForm(StudentsTableModel studentsTableModel, StudentActionType actionType, Teacher teacher) {
+		this(studentsTableModel, actionType);
+		this.teacher = teacher;
+	}
+
 	public StudentForm(StudentsTableModel studentsTableModel, StudentActionType actionType,
 			Student student) {
 		this(studentsTableModel, actionType);
@@ -140,6 +148,12 @@ public class StudentForm extends JFrame {
 		statusFormField.setText(student.getStatus());
 
 		this.student = student;
+	}
+
+	public StudentForm(StudentsTableModel studentsTableModel, StudentActionType actionType,
+			Student student, Teacher teacher) {
+		this(studentsTableModel, actionType, student);
+		this.teacher = teacher;
 	}
 
 	private JScrollPane getFormContainer() {
@@ -612,19 +626,38 @@ public class StudentForm extends JFrame {
 					PosgraduateStudentService.updatePosgraduateStudentById(student.getId(), posgraduateStudent);
 			}
 
-			ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudents();
-			ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudents();
-			ArrayList<Student> students = new ArrayList<>();
+			if (teacher == null) {
+				ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService.getUndergraduateStudents();
+				ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService.getPosgraduateStudents();
+				ArrayList<Student> students = new ArrayList<>();
 
-			if (undergraduateStudents != null) {
-				students.addAll(undergraduateStudents);
+				if (undergraduateStudents != null) {
+					students.addAll(undergraduateStudents);
+				}
+
+				if (posgraduateStudents != null) {
+					students.addAll(posgraduateStudents);
+				}
+				
+				studentsTableModel.setStudentList(students);
+			} else {
+				ArrayList<UndergraduateStudent> undergraduateStudents = UndergraduateStudentService
+						.getUndergraduateStudentsByNameOfMentee(teacher.getName());
+				ArrayList<PosgraduateStudent> posgraduateStudents = PosgraduateStudentService
+						.getPosgraduateStudentsByNameOfMentee(teacher.getName());
+				ArrayList<Student> students = new ArrayList<>();
+		
+				if (undergraduateStudents != null) {
+					students.addAll(undergraduateStudents);
+				}
+		
+				if (posgraduateStudents != null) {
+					students.addAll(posgraduateStudents);
+				}
+		
+				studentsTableModel.setStudentList(students);
+
 			}
-
-			if (posgraduateStudents != null) {
-				students.addAll(posgraduateStudents);
-			}
-
-			studentsTableModel.setStudentList(students);
 
 		}
 

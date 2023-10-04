@@ -33,6 +33,8 @@ import app.backend.services.TeacherService;
 import app.frontend.models.CoordinationActivityTableModel;
 import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
 
+import java.util.*;
+
 public class CoordinationActivityForm extends JFrame {
 
 	private Container container;
@@ -46,6 +48,8 @@ public class CoordinationActivityForm extends JFrame {
 	private FormField statusFormField;
 	private FormField descriptionFormField;
 
+	Teacher teacher;
+
 	public enum CoordinationActivityActionType {
 		EDIT_ACTIVITY, ADD_ACTIVITY, INFO_ACTIVITY
 	}
@@ -54,6 +58,10 @@ public class CoordinationActivityForm extends JFrame {
 	CoordinationActivityActionType coordinationActivityActionType;
 	CoordinationActivityTableModel coordinationActivityTableModel;
 
+	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType, Teacher teacher) {
+		this(coordinationActivityTableModel, actionType);
+		this.teacher = teacher;
+	}
 
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType) {
 		super("");
@@ -94,6 +102,12 @@ public class CoordinationActivityForm extends JFrame {
 
 		setVisible(true);
 	}
+
+	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType,
+			CoordinationActivity activity, Teacher teacher) {
+				this(coordinationActivityTableModel, actionType, activity);
+				this.teacher = teacher;
+			}
 
 	public CoordinationActivityForm(CoordinationActivityTableModel coordinationActivityTableModel, CoordinationActivityActionType actionType,
 			CoordinationActivity activity) {
@@ -313,7 +327,15 @@ public class CoordinationActivityForm extends JFrame {
 			if ( coordinationActivityActionType == CoordinationActivityActionType.ADD_ACTIVITY ) CoordinationActivityService.postCoordinationActivity(coordinationActivity);
 			else if ( coordinationActivityActionType == CoordinationActivityActionType.EDIT_ACTIVITY ) CoordinationActivityService.updateCoordinationActivityById(coordinationActivity.getId(), coordinationActivity);
 
-			coordinationActivityTableModel.setCoordinationActivityList(CoordinationActivityService.getCoordinationActivities());
+			if (teacher == null) coordinationActivityTableModel.setCoordinationActivityList(CoordinationActivityService.getCoordinationActivities());
+			else {
+				ArrayList<CoordinationActivity> coordinationActivities = CoordinationActivityService
+						.getActivitiesByNameOfPersonResponsible(teacher.getName());
+				if (coordinationActivities != null)
+					coordinationActivityTableModel.setCoordinationActivityList(coordinationActivities);
+			}
+
+			
 		}
 
 		dispose();
