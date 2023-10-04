@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.frontend.components.Button.ButtonType;
+import app.frontend.components.Button.ButtonInfo;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
 import res.values.ColorsManager;
@@ -13,6 +14,8 @@ import utils.ComponentDecorator;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+
+import java.util.*;
 
 public class TopBar extends JPanel {
 
@@ -62,4 +65,42 @@ public class TopBar extends JPanel {
 
 		add(container, BorderLayout.LINE_END);
 	}
+
+	public void setActionButtons(ArrayList<ButtonInfo> buttonInfoList) {
+    JPanel container = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		container.setOpaque(false);
+
+    for (ButtonInfo buttonInfo : buttonInfoList) {
+				JPanel buttonContainer = new JPanel() {
+					@Override
+					protected void paintComponent(Graphics g) {
+							super.paintComponent(g);
+							Graphics2D g2d = (Graphics2D) g;
+		
+							int width = getWidth();
+							int height = getHeight();
+		
+							setBackground(ColorsManager.getOnBackgroundColor());
+		
+							RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+		
+							g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
+							g2d.fill(roundedRectangle);
+					}
+				};
+
+        Button button = new Button(ButtonType.BASIC, buttonInfo.getLabel());
+        button.setIcon(buttonInfo.getIcon());
+        button.addActionListener(buttonInfo.getActionListener());
+        button.setForeground(ColorsManager.getTextColorLight());
+        button.setBorder(null);
+        ComponentDecorator.addPadding(button, 8, 16);
+
+				buttonContainer.add(button);
+
+        container.add(buttonContainer);
+    }
+
+    add(container, BorderLayout.LINE_END);
+}
 }

@@ -36,6 +36,7 @@ import app.frontend.screens.subjects.forms.SubjectForm.SubjectActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
+import app.frontend.screens.report.ReportIndividual;
 
 import java.time.*;
 
@@ -66,7 +67,16 @@ public class TeacherManager extends JPanel {
 		topBar.setBackground(ColorsManager.getOnBackgroundColor());
 		ComponentDecorator.addBorderBottom(topBar, 1);
 
-		topBar.setActionButton("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
+		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
+
+		buttonInfos.add(new ButtonInfo("Gerar Relatório", ImagesManager.getAddIcon(), new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ReportIndividual(teacher);
+			}
+		}));
+
+		buttonInfos.add(new ButtonInfo("Cadastrar", ImagesManager.getAddIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedOption = comboBox.getSelectedIndex();
@@ -97,7 +107,9 @@ public class TeacherManager extends JPanel {
 						break;
 				}
 			}
-		});
+		}));
+
+		topBar.setActionButtons(buttonInfos);
 
 		this.add(topBar, BorderLayout.PAGE_START);
 
