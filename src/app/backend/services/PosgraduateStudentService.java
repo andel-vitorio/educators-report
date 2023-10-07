@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Classe de serviço para gerenciar estudantes de pós-graduação no banco de

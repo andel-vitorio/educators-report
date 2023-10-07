@@ -29,9 +29,7 @@ import utils.ComponentDecorator;
 import app.backend.entities.CoordinationActivity;
 import app.backend.entities.Teacher;
 import app.backend.services.CoordinationActivityService;
-import app.backend.services.TeacherService;
 import app.frontend.models.CoordinationActivityTableModel;
-import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
 
 import java.util.*;
 

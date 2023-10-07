@@ -3,14 +3,9 @@ package app.frontend.screens.report;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.geom.RoundRectangle2D;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -18,8 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import app.frontend.components.Button;
-import app.frontend.components.Button.ButtonType;
 import app.frontend.components.FormField;
 import res.fonts.FontsManager;
 import res.fonts.FontsManager.FontType;
@@ -30,12 +23,7 @@ import utils.ComponentDecorator;
 import app.backend.entities.*;
 import app.backend.services.*;
 import app.frontend.components.TimePicker;
-import app.frontend.models.SubjectTableModel;
 
-
-import app.frontend.screens.students.forms.StudentForm.StudentActionType;
-
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import app.frontend.components.DatePicker;
 
@@ -76,7 +64,7 @@ public class ReportIndividual extends JFrame {
 
 	private JScrollPane getContentContainer() {
 		JPanel contentContainer = new JPanel();
-		contentContainer.setLayout(new BoxLayout(contentContainer, BoxLayout.Y_AXIS));
+		contentContainer.setLayout(new BoxLayout(contentContainer, BoxLayout.PAGE_AXIS));
 		contentContainer.setOpaque(false);
 
 		ArrayList<Subjects> subjects = SubjectsService.getSubjectsByTeacherName(teacher.getName());
@@ -103,10 +91,10 @@ public class ReportIndividual extends JFrame {
 		}
 
 		ArrayList<CoordinationActivity> coordinationActivities = CoordinationActivityService
-				.getActivitiesByNameOfPersonResponsible(teacher.getName());
-
+    .getActivitiesByNameOfPersonResponsible(teacher.getName());
+    
 		for ( CoordinationActivity activity: coordinationActivities ) {
-			contentContainer.add(getActivityReport(activity));
+      contentContainer.add(getActivityReport(activity));
 		}
 		
 		JScrollPane scrollPane = new JScrollPane(contentContainer);

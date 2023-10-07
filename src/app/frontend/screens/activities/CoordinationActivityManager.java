@@ -23,7 +23,6 @@ import app.frontend.screens.activities.form.CoordinationActivityForm.Coordinatio
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
-import java.time.*;
 
 public class CoordinationActivityManager extends JPanel {
 

@@ -27,6 +27,7 @@ public class Button extends JButton {
 		private String label;
 		private ImageIcon icon;
 		ActionListener actionListener;
+    Color backgroundColor;
 
 		/**
          * Construtor vazio da classe ButtonInfo.
@@ -56,6 +57,12 @@ public class Button extends JButton {
 			this.actionListener = action;
 		}
 
+    public ButtonInfo(String label, Color background, ImageIcon icon, ActionListener action) {
+			this(label, icon);
+      this.backgroundColor = background;
+			this.actionListener = action;
+		}
+
 		public void setIcon(ImageIcon icon) {
 			this.icon = icon;
 		}
@@ -68,6 +75,10 @@ public class Button extends JButton {
 			this.actionListener = actionListener;
 		}
 
+    public void setBackgroundColor(Color backgroundColor) {
+      this.backgroundColor = backgroundColor;
+    }
+
 		public ImageIcon getIcon() {
 			return icon;
 		}
@@ -79,6 +90,10 @@ public class Button extends JButton {
 		public ActionListener getActionListener() {
 			return actionListener;
 		}
+
+    public Color getBackgroundColor() {
+      return backgroundColor;
+    }
 	}
 
 	 /**

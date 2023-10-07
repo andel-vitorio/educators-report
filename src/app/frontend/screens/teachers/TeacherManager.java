@@ -22,7 +22,6 @@ import app.frontend.models.CoordinationActivityTableModel;
 import app.frontend.models.PapersTableModel;
 import app.frontend.models.StudentsTableModel;
 import app.frontend.models.SubjectTableModel;
-import app.frontend.models.TeacherTableModel;
 import app.frontend.screens.activities.form.CoordinationActivityForm;
 import app.frontend.screens.activities.form.CoordinationActivityForm.CoordinationActivityActionType;
 import app.frontend.screens.papers.forms.PaperForm;
@@ -30,15 +29,11 @@ import app.frontend.screens.papers.forms.PaperForm.PaperActionType;
 import app.frontend.screens.students.forms.StudentForm;
 import app.frontend.screens.students.forms.StudentForm.StudentActionType;
 import app.frontend.screens.subjects.forms.SubjectForm;
-import app.frontend.screens.teachers.forms.TeacherForm;
-import app.frontend.screens.teachers.forms.TeacherForm.ActionType;
 import app.frontend.screens.subjects.forms.SubjectForm.SubjectActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
 import app.frontend.screens.report.ReportIndividual;
-
-import java.time.*;
 
 public class TeacherManager extends JPanel {
 
@@ -46,7 +41,6 @@ public class TeacherManager extends JPanel {
 
 	private TopBar topBar;
 	private Table table;
-	private TeacherTableModel teacherTableModel;
 	private SubjectTableModel subjectTableModel;
 	private StudentsTableModel studentsTableModel;
 	private PapersTableModel papersTableModel;
@@ -69,7 +63,7 @@ public class TeacherManager extends JPanel {
 
 		ArrayList<ButtonInfo> buttonInfos = new ArrayList<>();
 
-		buttonInfos.add(new ButtonInfo("Gerar Relatório", ImagesManager.getAddIcon(), new ActionListener() {
+		buttonInfos.add(new ButtonInfo("Gerar Relatório", ColorsManager.getButtonBackgroundSecondary(), ImagesManager.getReportIcon(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ReportIndividual(teacher);
@@ -110,6 +104,7 @@ public class TeacherManager extends JPanel {
 		}));
 
 		topBar.setActionButtons(buttonInfos);
+    topBar.getActionsButtons().get(0).setForeground(ColorsManager.getTextColorDark());
 
 		this.add(topBar, BorderLayout.PAGE_START);
 

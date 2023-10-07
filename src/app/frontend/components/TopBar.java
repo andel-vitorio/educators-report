@@ -19,88 +19,102 @@ import java.util.*;
 
 public class TopBar extends JPanel {
 
-	private JLabel titleLabel;
-	private Button button;
+  private JLabel titleLabel;
+  private Button button;
 
-	public TopBar(String title) {
-		setLayout(new BorderLayout());
-		ComponentDecorator.addPadding(this, 12, 24);
+  ArrayList<Button> actionsButtons;
 
-		titleLabel = new JLabel(title);
+  public TopBar(String title) {
+    setLayout(new BorderLayout());
+    ComponentDecorator.addPadding(this, 12, 24);
 
-		if ( !FontsManager.getLoadError() ) titleLabel.setFont(FontsManager.getFont(FontType.SEMI_BOLD, 16));
+    titleLabel = new JLabel(title);
 
-		add(titleLabel, BorderLayout.LINE_START);
-	}
+    if (!FontsManager.getLoadError())
+      titleLabel.setFont(FontsManager.getFont(FontType.SEMI_BOLD, 16));
 
-	public void setActionButton(String label, ImageIcon icon, ActionListener listener) {
+    add(titleLabel, BorderLayout.LINE_START);
+  }
 
-		JPanel container = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					Graphics2D g2d = (Graphics2D) g;
+  public void setActionButton(String label, ImageIcon icon, ActionListener listener) {
 
-					int width = getWidth();
-					int height = getHeight();
+    JPanel container = new JPanel() {
+      @Override
+      protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
 
-					setBackground(ColorsManager.getOnBackgroundColor());
+        int width = getWidth();
+        int height = getHeight();
 
-					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+        setBackground(ColorsManager.getOnBackgroundColor());
 
-					g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
-					g2d.fill(roundedRectangle);
-			}
-		};
+        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
 
-		button = new Button(ButtonType.BASIC, label);
-		button.setIcon(icon);
-		button.addActionListener(listener);
-		button.setForeground(ColorsManager.getTextColorLight());
-		button.setBorder(null);
-		ComponentDecorator.addPadding(button, 12, 16);
+        g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
+        g2d.fill(roundedRectangle);
+      }
+    };
 
-		container.setLayout(new BorderLayout());
-		container.add(button, BorderLayout.CENTER);
+    button = new Button(ButtonType.BASIC, label);
+    button.setIcon(icon);
+    button.addActionListener(listener);
+    button.setForeground(ColorsManager.getTextColorLight());
+    button.setBorder(null);
+    ComponentDecorator.addPadding(button, 12, 16);
 
-		add(container, BorderLayout.LINE_END);
-	}
+    container.setLayout(new BorderLayout());
+    container.add(button, BorderLayout.CENTER);
 
-	public void setActionButtons(ArrayList<ButtonInfo> buttonInfoList) {
-    JPanel container = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		container.setOpaque(false);
+    add(container, BorderLayout.LINE_END);
+  }
+
+  public void setActionButtons(ArrayList<ButtonInfo> buttonInfoList) {
+    JPanel container = new JPanel(new FlowLayout(FlowLayout.RIGHT, 24, 0));
+    container.setOpaque(false);
+    actionsButtons = new ArrayList<>();
 
     for (ButtonInfo buttonInfo : buttonInfoList) {
-				JPanel buttonContainer = new JPanel() {
-					@Override
-					protected void paintComponent(Graphics g) {
-							super.paintComponent(g);
-							Graphics2D g2d = (Graphics2D) g;
-		
-							int width = getWidth();
-							int height = getHeight();
-		
-							setBackground(ColorsManager.getOnBackgroundColor());
-		
-							RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
-		
-							g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
-							g2d.fill(roundedRectangle);
-					}
-				};
+      JPanel buttonContainer = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+          super.paintComponent(g);
+          Graphics2D g2d = (Graphics2D) g;
 
-        Button button = new Button(ButtonType.BASIC, buttonInfo.getLabel());
-        button.setIcon(buttonInfo.getIcon());
-        button.addActionListener(buttonInfo.getActionListener());
-        button.setForeground(ColorsManager.getTextColorLight());
-        button.setBorder(null);
-        ComponentDecorator.addPadding(button, 8, 16);
+          int width = getWidth();
+          int height = getHeight();
 
-				buttonContainer.add(button);
+          setBackground(ColorsManager.getOnBackgroundColor());
 
-        container.add(buttonContainer);
+          RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+
+          if (buttonInfo.getBackgroundColor() != null)
+            g2d.setColor(buttonInfo.getBackgroundColor());
+          else
+            g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
+
+          g2d.fill(roundedRectangle);
+        }
+      };
+
+      Button button = new Button(ButtonType.BASIC, buttonInfo.getLabel());
+      button.setIcon(buttonInfo.getIcon());
+      button.addActionListener(buttonInfo.getActionListener());
+      button.setForeground(ColorsManager.getTextColorLight());
+      button.setBorder(null);
+      ComponentDecorator.addPadding(button, 8, 16);
+
+      buttonContainer.add(button);
+
+      actionsButtons.add(button);
+
+      container.add(buttonContainer);
     }
 
     add(container, BorderLayout.LINE_END);
-}
+  }
+
+  public ArrayList<Button> getActionsButtons() {
+    return actionsButtons;
+  }
 }

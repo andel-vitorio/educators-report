@@ -15,6 +15,7 @@ public class ImagesManager {
 	public static ImageIcon INFO_ICON;
 	public static ImageIcon EDIT_ICON;	
 	public static ImageIcon DELETE_ICON;
+  public static ImageIcon REPORT_ICON;
 
 	public static void load() {
 		String path = ImagesManager.class.getResource("/res/img").getFile();
@@ -28,6 +29,7 @@ public class ImagesManager {
 		INFO_ICON = new ImageIcon(path + "/info.png");
 		EDIT_ICON = new ImageIcon(path + "/edit.png");
 		DELETE_ICON = new ImageIcon(path + "/delete.png");
+    REPORT_ICON = new ImageIcon(path + "/report.png");
 	}
 
 	public static ImageIcon getLogo() {
@@ -69,4 +71,7 @@ public class ImagesManager {
 		return DELETE_ICON;
 	}
 	
+  public static ImageIcon getReportIcon() {
+    return REPORT_ICON;
+  }
 }

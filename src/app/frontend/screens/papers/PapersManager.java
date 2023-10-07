@@ -23,7 +23,6 @@ import app.frontend.screens.papers.forms.PaperForm.PaperActionType;
 import res.img.ImagesManager;
 import res.values.ColorsManager;
 import utils.ComponentDecorator;
-import java.time.*;
 
 public class PapersManager extends JPanel {
 

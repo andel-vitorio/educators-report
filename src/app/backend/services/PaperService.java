@@ -6,7 +6,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import app.backend.Database;
 import app.backend.entities.Paper;
-import java.time.LocalDate;
 
 /**
  * Classe de serviço para gerenciar trabalhos acadêmicos (papers) no banco de

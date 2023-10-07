@@ -6,7 +6,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import app.backend.Database;
 import app.backend.entities.CoordinationActivity;
-import java.time.LocalDate;
 
 /**
  * Classe de serviço para gerenciar atividades de coordenação no banco de dados.

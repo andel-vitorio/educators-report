@@ -12,7 +12,6 @@ import java.awt.*;
 public class FormField extends JPanel {
   private JLabel formLabel;
   private JComponent formInput; // Use JComponent como tipo base
-  private boolean multiline = false;
   int width, height;
 
   public enum FieldType {
@@ -74,7 +73,6 @@ public class FormField extends JPanel {
   }
 
   public void isMultiline(boolean multiline) {
-    this.multiline = multiline;
     remove(formInput);
     initializeInputComponent();
     add(this.formInput, BorderLayout.CENTER);
