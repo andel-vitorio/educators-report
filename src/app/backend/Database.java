@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * para conectar e desconectar do banco de dados.
  */
 public class Database {
-    private static String url = "jdbc:mysql://localhost:3306/EducatorsReportDatabase";
+    private static String url = "jdbc:mysql://localhost:3306/EducatorsRITSystems";
     private static String user;  // Nome de usuário do banco de dados
     private static String pass;  // Senha do banco de dados
     protected static Connection connection = null;
