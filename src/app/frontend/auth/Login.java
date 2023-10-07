@@ -1,6 +1,7 @@
 package app.frontend.auth;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JFrame;
@@ -39,6 +42,7 @@ public class Login extends JFrame {
 
   private FormField userFormField;
   private FormField passwordFormField;
+  private JLabel errorLabel;
 
   private Observable observable = new Observable();
 
@@ -50,7 +54,7 @@ public class Login extends JFrame {
     super("Autenticação");
 
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    setPreferredSize(new Dimension(400, 400));
+    setPreferredSize(new Dimension(400, 420));
     setSize(getPreferredSize());
     setResizable(false);
     setLocationRelativeTo(null);
@@ -64,9 +68,23 @@ public class Login extends JFrame {
     titleLabel.setBackground(ColorsManager.getBackgroundColor());
     ComponentDecorator.addPadding(titleLabel, 24);
 
+    errorLabel = new JLabel("Credenciais incorretas. Obs: O usuário precisa ser admin.");
+    errorLabel.setForeground(Color.RED);
+    errorLabel.setHorizontalAlignment(JLabel.LEFT);
+    errorLabel.setVisible(false);
+    errorLabel.setFont(FontsManager.getFont(FontType.SEMI_BOLD, 10));
+
     container.add(titleLabel, BorderLayout.PAGE_START);
     container.add(getFormContainer(), BorderLayout.CENTER);
     container.add(getButtonsContainer(), BorderLayout.PAGE_END);
+
+    addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e) {
+        Database.disconnect();
+        System.exit(0);
+      }
+    });
 
     setVisible(true);
   }
@@ -101,13 +119,17 @@ public class Login extends JFrame {
     userFormField.setEditable(isEditable);
     formContainer.add(userFormField, constraints);
 
-    constraints.insets = new Insets(0, 0, 16, 0);
+    constraints.insets = new Insets(0, 0, 4, 0);
     constraints.gridwidth = 2;
     constraints.gridx = 0;
     constraints.gridy = y++;
     passwordFormField = new FormField("Senha", FieldType.PASSWORD, 0);
     passwordFormField.setEditable(isEditable);
     formContainer.add(passwordFormField, constraints);
+
+    constraints.insets = new Insets(0, 0, 16, 0);
+    constraints.gridy = y++;
+    formContainer.add(errorLabel, constraints);
 
     GridBagConstraints fillerConstraints = new GridBagConstraints();
     fillerConstraints.fill = GridBagConstraints.BOTH;
@@ -195,9 +217,13 @@ public class Login extends JFrame {
    * Notifica os observadores e fecha a janela de login após a confirmação.
    */
   private void confirm() {
-    new Database(userFormField.getText(), passwordFormField.getText());
-    observable.notifyObservers("confirmed-login");
-    dispose();
+    try {
+      new Database(userFormField.getText().trim(), passwordFormField.getText().trim());
+      observable.notifyObservers("confirmed-login");
+      dispose();
+    } catch (RuntimeException e) {
+      errorLabel.setVisible(true);
+    }
   }
 
   /**

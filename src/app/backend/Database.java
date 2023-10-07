@@ -37,7 +37,6 @@ public class Database {
             String urlWithCreateDB = url + "?createDatabaseIfNotExist=true";
             connection = DriverManager.getConnection(urlWithCreateDB, user, pass);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Falha ao conectar ao banco de dados.");
         }
     }
@@ -51,7 +50,6 @@ public class Database {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Falha ao desconectar do banco de dados.");
         }
     }
