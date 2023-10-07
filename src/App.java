@@ -130,12 +130,12 @@ public class App extends JFrame {
     // Criar e configurar a barra lateral
     SideBar sideBar = new SideBar(260, 720);
     sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
-        .setHeader("RIT Systems", "Versão 1.0", ImagesManager.getLogo())
+        .setHeader("RIT Systems", "Versão 1.1", ImagesManager.getLogo())
         .setNavigation(navigation);
 
     // Adicionar componentes à janela principal
     add(sideBar.getComponent(), BorderLayout.LINE_START);
-    add(windows, BorderLayout.CENTER); 
+    add(windows, BorderLayout.CENTER);
   }
 
   public static void changeComponentColors(Container container, Color foregroundColor, Color backgroundColor) {
