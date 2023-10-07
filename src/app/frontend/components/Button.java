@@ -20,18 +20,37 @@ import utils.ComponentDecorator;
 
 public class Button extends JButton {
 
+	/**
+     * Classe interna que armazena informações associadas a um botão, como rótulo, ícone e ouvinte de ação.
+     */
 	public static class ButtonInfo {
 		private String label;
 		private ImageIcon icon;
 		ActionListener actionListener;
 
+		/**
+         * Construtor vazio da classe ButtonInfo.
+         */
 		public ButtonInfo() {}
 
+		/**
+         * Construtor que aceita um rótulo e um ícone.
+         *
+         * @param label O rótulo do botão.
+         * @param icon  O ícone do botão.
+         */
 		public ButtonInfo(String label, ImageIcon icon) {
 			this.label = label;
 			this.icon = icon;
 		}
 
+		/**
+         * Construtor que aceita um rótulo, um ícone e um ouvinte de ação.
+         *
+         * @param label         O rótulo do botão.
+         * @param icon          O ícone do botão.
+         * @param actionListener O ouvinte de ação do botão.
+         */
 		public ButtonInfo(String label, ImageIcon icon, ActionListener action) {
 			this(label, icon);
 			this.actionListener = action;
@@ -62,10 +81,17 @@ public class Button extends JButton {
 		}
 	}
 
-	 // Classe personalizada para criar uma borda com cantos arredondados
+	 /**
+     * Classe interna que cria uma borda com cantos arredondados para o botão.
+     */
     private static class RoundedBorder extends AbstractBorder {
         private int radius;
 
+				/**
+         * Construtor que aceita o raio dos cantos arredondados.
+         *
+         * @param radius O raio dos cantos arredondados.
+         */
         public RoundedBorder(int radius) {
             this.radius = radius;
         }
@@ -91,11 +117,19 @@ public class Button extends JButton {
         }
     }
 
+
+    /**
+     * Enumeração que define o tipo de botão, como "BASIC" ou "FILLED".
+     */
 	public enum ButtonType {
 		BASIC,
 		FILLED
 	}
 
+
+    /**
+     * Enumeração que define o tipo de botão, como "BASIC" ou "FILLED".
+     */
 	public Button(ButtonType type, String label) {
 		super(label);
 
@@ -124,16 +158,33 @@ public class Button extends JButton {
 		}
 	}
 
+	/**
+     * Construtor para criar um botão com um tipo específico, rótulo e cor de fundo.
+     *
+     * @param type           O tipo de botão (BASIC ou FILLED).
+     * @param label          O rótulo do botão.
+     * @param backgroundColor A cor de fundo do botão.
+     */
 	public Button(ButtonType type, String label, Color backgroundColor) {
 		this(type, label);
 		setBackground(backgroundColor);
 	}
 
+	/**
+     * Define um ícone para o botão.
+     *
+     * @param icon O ícone a ser definido para o botão.
+     */
 	public void setIcon(ImageIcon icon) {
 		super.setIcon(icon);
 		setIconTextGap(DimensManager.getIconTextGap());
 	}
 
+	/**
+     * Adiciona uma borda arredondada ao botão.
+     *
+     * @param radius O raio dos cantos arredondados da borda.
+     */
 	public void addRoundedBorder(int radius) {
 		setBorder(new RoundedBorder(radius));
 	}

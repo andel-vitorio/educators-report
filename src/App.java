@@ -23,96 +23,128 @@ import res.fonts.FontsManager;
 import res.img.ImagesManager;
 import res.values.*;
 
+/**
+ * Classe principal da aplicação Educator's Report.
+ */
 public class App extends JFrame {
 
+	// IDs das janelas utilizados para o gerenciamento de componentes
 	private static final String TEACHER_WINDOWS_ID = "teacher-windows";
 	private static final String SUBJECT_WINDOWS_ID = "subject-windows";
 	private static final String STUDENT_WINDOWS_ID = "student-windows";
 	private static final String PAPER_WINDOWS_ID = "paper-windows";
 	private static final String ACTIVITY_WINDOWS_ID = "activity-windows";
 
+	/**
+	 * Construtor da classe App.
+	 *
+	 * @throws IOException Se ocorrer um erro ao carregar recursos.
+	 */
 	public App() throws IOException {
-		super("Educator's Report");
-		ImagesManager.load();
-		FontsManager.load();
+			super("Educator's Report");
 
-		Login login =  new Login();
+			// Carregar recursos como imagens e fontes
+			ImagesManager.load();
+			FontsManager.load();
 
-		login.getObservable().addObserver(action -> {
-			if ( action.equals("confirmed-login") ) {
-				this.init();
-				try {
-					addComponents();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-		});
+			// Inicializar a tela de login
+			Login login = new Login();
 
-
+			// Adicionar um observador para tratar a confirmação de login
+			login.getObservable().addObserver(action -> {
+					if (action.equals("confirmed-login")) {
+							this.init();
+							try {
+									addComponents();
+							} catch (IOException e) {
+									e.printStackTrace();
+							}
+					}
+			});
 	}
 
-	void init() {
-		this.setLayout(new BorderLayout());
-		this.setMinimumSize(new Dimension(1280, 720));
-		this.setPreferredSize(this.getMinimumSize());
-		this.setSize(this.getPreferredSize());
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBackground(ColorsManager.getBackgroundColor());
-		this.setLocationRelativeTo(null);
+	/**
+	 * Inicializa a configuração da janela principal.
+	 */
+	private void init() {
+			this.setLayout(new BorderLayout());
+			this.setMinimumSize(new Dimension(1280, 720));
+			this.setPreferredSize(this.getMinimumSize());
+			this.setSize(this.getPreferredSize());
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.setBackground(ColorsManager.getBackgroundColor());
+			this.setLocationRelativeTo(null);
 
-		new TeacherService();
-		new CoordinationActivityService();
-		new PaperService();
-		new PosgraduateStudentService();
-		new SubjectsService();
-		new UndergraduateStudentService();
+			// Inicializar os serviços de backend
+			new TeacherService();
+			new CoordinationActivityService();
+			new PaperService();
+			new PosgraduateStudentService();
+			new SubjectsService();
+			new UndergraduateStudentService();
 	}
 
-	void addComponents() throws IOException {
+	/**
+	 * Adiciona componentes à janela principal.
+	 *
+	 * @throws IOException Se ocorrer um erro ao adicionar componentes.
+	 */
+	private void addComponents() throws IOException {
+			// Inicializar gerenciadores de tela
+			TeachersManager teachersManager = new TeachersManager();
+			TeacherManager teacherManager = new TeacherManager();
 
-		TeachersManager teachersManager = new TeachersManager();
-		TeacherManager teacherManager = new TeacherManager();
+			// Criar um painel para alternar entre as diferentes telas
+			JPanel windows = new JPanel();
+			windows.setLayout(new CardLayout());
+			windows.add(teachersManager, TEACHER_WINDOWS_ID);
+			windows.add(new SubjectsManager(), SUBJECT_WINDOWS_ID);
+			windows.add(new StudentsManager(), STUDENT_WINDOWS_ID);
+			windows.add(new PapersManager(), PAPER_WINDOWS_ID);
+			windows.add(new CoordinationActivityManager(), ACTIVITY_WINDOWS_ID);
+			windows.add(teacherManager, TeachersManager.ACTIVITY_TEACHER_WINDOWS_ID);
 
-		JPanel windows = new JPanel();
-		windows.setLayout(new CardLayout());
-		windows.add(teachersManager, TEACHER_WINDOWS_ID);
-		windows.add(new SubjectsManager(), SUBJECT_WINDOWS_ID);
-		windows.add(new StudentsManager(), STUDENT_WINDOWS_ID);
-		windows.add(new PapersManager(), PAPER_WINDOWS_ID);
-		windows.add(new CoordinationActivityManager(), ACTIVITY_WINDOWS_ID);
-		windows.add(teacherManager, TeachersManager.ACTIVITY_TEACHER_WINDOWS_ID);
-		
-		Navigation navigation = new Navigation(300, 300, null);
-		navigation.setItem("Professores", ImagesManager.getTeacherIcon(), TEACHER_WINDOWS_ID);
-		navigation.setItem("Disciplinas", ImagesManager.getClassIcon(), SUBJECT_WINDOWS_ID);
-		navigation.setItem("Alunos", ImagesManager.getStudentIcon(), STUDENT_WINDOWS_ID);
-		navigation.setItem("Artigos", ImagesManager.getPaperIcon(), PAPER_WINDOWS_ID);
-		navigation.setItem("Atividades", ImagesManager.getActivityIcon(), ACTIVITY_WINDOWS_ID);
+			// Criar um painel de navegação lateral
+			Navigation navigation = new Navigation(300, 300, null);
+			navigation.setItem("Professores", ImagesManager.getTeacherIcon(), TEACHER_WINDOWS_ID);
+			navigation.setItem("Disciplinas", ImagesManager.getClassIcon(), SUBJECT_WINDOWS_ID);
+			navigation.setItem("Alunos", ImagesManager.getStudentIcon(), STUDENT_WINDOWS_ID);
+			navigation.setItem("Artigos", ImagesManager.getPaperIcon(), PAPER_WINDOWS_ID);
+			navigation.setItem("Atividades", ImagesManager.getActivityIcon(), ACTIVITY_WINDOWS_ID);
 
-		navigation.getObservable().addObserver(action -> {
-			CardLayout card = (CardLayout) windows.getLayout();
-			card.show(windows, action);
-		});
+			// Adicionar um observador para alternar entre as telas com base na navegação
+			navigation.getObservable().addObserver(action -> {
+					CardLayout card = (CardLayout) windows.getLayout();
+					card.show(windows, action);
+			});
 
-		teachersManager.getObservable().addObserver(action -> {
-			CardLayout card = (CardLayout) windows.getLayout();
-			teacherManager.setTeacher(teachersManager.getSelectedTeacher());
-			teacherManager.showSubjectsTable();
-			card.show(windows, action);
-		});
-		
-		SideBar sideBar = new SideBar(260, 720);
-		sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
-				.setHeader("RIT Systems", "Versão 1.0", ImagesManager.getLogo())
-				.setNavigation(navigation);
+			// Adicionar um observador para mostrar as disciplinas de um professor selecionado
+			teachersManager.getObservable().addObserver(action -> {
+					CardLayout card = (CardLayout) windows.getLayout();
+					teacherManager.setTeacher(teachersManager.getSelectedTeacher());
+					teacherManager.showSubjectsTable();
+					card.show(windows, action);
+			});
 
-		add(sideBar.getComponent(), BorderLayout.LINE_START);
-		add(windows, BorderLayout.CENTER);
+			// Criar e configurar a barra lateral
+			SideBar sideBar = new SideBar(260, 720);
+			sideBar.setBackgroundColor(ColorsManager.getOnBackgroundColor())
+							.setHeader("RIT Systems", "Versão 1.0", ImagesManager.getLogo())
+							.setNavigation(navigation);
+
+			// Adicionar componentes à janela principal
+			add(sideBar.getComponent(), BorderLayout.LINE_START);
+			add(windows, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Método principal que inicia a aplicação.
+	 *
+	 * @param args Argumentos da linha de comando (não utilizados).
+	 * @throws IOException Se ocorrer um erro durante a execução.
+	 */
 	public static void main(String[] args) throws IOException {
-		App app = new App();
-		app.setVisible(true);
+			App app = new App();
+			app.setVisible(true);
 	}
 }

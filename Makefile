@@ -51,5 +51,7 @@ run: exec
 
 copy-resources: copy-images copy-fonts
 
+javadoc: javadoc -d docs -sourcepath $(SRC_DIR) $(SRC_DIR)/*.java
+
 clean:
 	rm -rf $(BIN_DIR)
