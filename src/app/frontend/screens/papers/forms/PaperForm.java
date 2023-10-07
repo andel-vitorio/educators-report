@@ -33,312 +33,350 @@ import app.frontend.models.PapersTableModel;
 
 import java.util.*;
 
+/**
+ * Classe que representa o formulário de edição, adição ou visualização de um
+ * artigo.
+ */
 public class PaperForm extends JFrame {
 
-	private Container container;
-	private boolean isEditable = true;
+  private Container container;
+  private boolean isEditable = true;
 
-	private FormField titleFormField;
-	private FormField authorsFormField;
-	private DatePicker publicationDatePicker;
-	private FormField keywordsFormField;
-	private FormField descriptionFormField;
-	private FormField categoryFormField;
-	private FormField urlFormField;
+  private FormField titleFormField;
+  private FormField authorsFormField;
+  private DatePicker publicationDatePicker;
+  private FormField keywordsFormField;
+  private FormField descriptionFormField;
+  private FormField categoryFormField;
+  private FormField urlFormField;
 
-	Teacher teacher;
+  Teacher teacher;
 
-	public enum PaperActionType {
-		EDIT_PAPER, ADD_PAPER, INFO_PAPER
-	}
-	
-	PapersTableModel papersTableModel;
-	Paper paper;
-	PaperActionType actionType;
+  /**
+   * Enumeração que representa os tipos de ações possíveis para o formulário.
+   */
+  public enum PaperActionType {
+    EDIT_PAPER, ADD_PAPER, INFO_PAPER
+  }
 
-	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Teacher teacher) {
-		this(papersTableModel, actionType);
-		this.teacher = teacher;
-		authorsFormField.setText(authorsFormField.getText() + teacher.getName() + "; ");
-	}
+  PapersTableModel papersTableModel;
+  Paper paper;
+  PaperActionType actionType;
 
-	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType) {
-		super("");
+  /**
+   * Cria uma instância do PaperForm.
+   * 
+   * @param papersTableModel O modelo de tabela de artigos.
+   * @param actionType       O tipo de ação a ser executada no formulário.
+   * @param teacher          O professor associado ao artigo (opcional).
+   */
+  public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Teacher teacher) {
+    this(papersTableModel, actionType);
+    this.teacher = teacher;
+    authorsFormField.setText(authorsFormField.getText() + teacher.getName() + "; ");
+  }
 
-		String title;
+  /**
+   * Cria uma instância do PaperForm.
+   * 
+   * @param papersTableModel O modelo de tabela de artigos.
+   * @param actionType       O tipo de ação a ser executada no formulário.
+   */
+  public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType) {
+    super("");
 
-		this.papersTableModel = papersTableModel;
-		this.actionType = actionType;
+    String title;
 
-		if (actionType == PaperActionType.EDIT_PAPER)
-			title = "Editar Informações";
-		else if (actionType == PaperActionType.ADD_PAPER)
-			title = "Cadastrar Artigo";
-		else {
-			title = "Dados do Artigo";
-			isEditable = false;
-		}
+    this.papersTableModel = papersTableModel;
+    this.actionType = actionType;
 
-		setTitle(title);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setPreferredSize(new Dimension(600, 650));
-		setSize(getPreferredSize());
-		setResizable(false);
-		setLocationRelativeTo(null);
+    if (actionType == PaperActionType.EDIT_PAPER)
+      title = "Editar Informações";
+    else if (actionType == PaperActionType.ADD_PAPER)
+      title = "Cadastrar Artigo";
+    else {
+      title = "Dados do Artigo";
+      isEditable = false;
+    }
 
-		container = getContentPane();
-		container.setBackground(ColorsManager.getOnBackgroundColor());
-		container.setLayout(new BorderLayout());
+    setTitle(title);
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    setPreferredSize(new Dimension(600, 650));
+    setSize(getPreferredSize());
+    setResizable(false);
+    setLocationRelativeTo(null);
 
-		JLabel titleLabel = new JLabel(title, JLabel.LEFT);
-		titleLabel.setFont(FontsManager.getFont(FontType.BOLD, DimensManager.getTitleFormsFontsize()));
-		titleLabel.setBackground(ColorsManager.getBackgroundColor());
-		ComponentDecorator.addPadding(titleLabel, 24);
+    container = getContentPane();
+    container.setBackground(ColorsManager.getOnBackgroundColor());
+    container.setLayout(new BorderLayout());
 
-		container.add(titleLabel, BorderLayout.PAGE_START);
-		container.add(getFormContainer(), BorderLayout.CENTER);
-		container.add(getButtonsContainer(), BorderLayout.PAGE_END);
+    JLabel titleLabel = new JLabel(title, JLabel.LEFT);
+    titleLabel.setFont(FontsManager.getFont(FontType.BOLD, DimensManager.getTitleFormsFontsize()));
+    titleLabel.setBackground(ColorsManager.getBackgroundColor());
+    ComponentDecorator.addPadding(titleLabel, 24);
 
-		setVisible(true);
-	}
+    container.add(titleLabel, BorderLayout.PAGE_START);
+    container.add(getFormContainer(), BorderLayout.CENTER);
+    container.add(getButtonsContainer(), BorderLayout.PAGE_END);
 
-	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Paper paper, Teacher teacher) {
-		this(papersTableModel, actionType, paper);
-		this.teacher = teacher;
-	}
+    setVisible(true);
+  }
 
-	public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Paper paper) {
-		this(papersTableModel, actionType);
-		titleFormField.setText(paper.getTitle());
-		authorsFormField.setText(paper.getAuthors());
-		publicationDatePicker.setDate(paper.getPublicationDate());
-		keywordsFormField.setText(paper.getKeywords());
-		descriptionFormField.setText(paper.getDescription());
-		categoryFormField.setText(paper.getCategory());
-		urlFormField.setText(paper.getUrl());
-		this.paper = paper;
-	}
+  /**
+   * Cria uma instância do PaperForm preenchida com dados de um artigo existente.
+   * 
+   * @param papersTableModel O modelo de tabela de artigos.
+   * @param actionType       O tipo de ação a ser executada no formulário.
+   * @param paper            O artigo a ser editado ou visualizado.
+   * @param teacher          O professor associado ao artigo (opcional).
+   */
+  public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Paper paper, Teacher teacher) {
+    this(papersTableModel, actionType, paper);
+    this.teacher = teacher;
+  }
 
-	private JScrollPane getFormContainer() {
-		JPanel formContainer = new JPanel(new GridBagLayout());
-		ComponentDecorator.addPadding(formContainer, 0, 24);
-		formContainer.setOpaque(false);
-		int y = 0;
+  /**
+   * Cria uma instância do PaperForm preenchida com dados de um artigo existente.
+   * 
+   * @param papersTableModel O modelo de tabela de artigos.
+   * @param actionType       O tipo de ação a ser executada no formulário.
+   * @param paper            O artigo a ser editado ou visualizado.
+   */
+  public PaperForm(PapersTableModel papersTableModel, PaperActionType actionType, Paper paper) {
+    this(papersTableModel, actionType);
+    titleFormField.setText(paper.getTitle());
+    authorsFormField.setText(paper.getAuthors());
+    publicationDatePicker.setDate(paper.getPublicationDate());
+    keywordsFormField.setText(paper.getKeywords());
+    descriptionFormField.setText(paper.getDescription());
+    categoryFormField.setText(paper.getCategory());
+    urlFormField.setText(paper.getUrl());
+    this.paper = paper;
+  }
 
-		GridBagConstraints constraints = new GridBagConstraints();
+  private JScrollPane getFormContainer() {
+    JPanel formContainer = new JPanel(new GridBagLayout());
+    ComponentDecorator.addPadding(formContainer, 0, 24);
+    formContainer.setOpaque(false);
+    int y = 0;
 
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.anchor = GridBagConstraints.PAGE_START;
-		constraints.gridwidth = 2;
-		constraints.gridx = 0;
-		constraints.gridy = y++;
-		constraints.weightx = 1.0;
+    GridBagConstraints constraints = new GridBagConstraints();
 
-		formContainer.add(getSectionLabel("Informações Gerais"), constraints);
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.PAGE_START;
+    constraints.gridwidth = 2;
+    constraints.gridx = 0;
+    constraints.gridy = y++;
+    constraints.weightx = 1.0;
 
-		constraints.insets = new Insets(0, 0, 16, 0);
-		constraints.gridwidth = 2;
-		constraints.gridx = 0;
-		constraints.gridy = y++;
-		titleFormField = new FormField("Título do Artigo", 0);
-		titleFormField.setEditable(isEditable);
-		formContainer.add(titleFormField, constraints);
+    formContainer.add(getSectionLabel("Informações Gerais"), constraints);
 
-		constraints.insets = new Insets(0, 0, 16, 0);
-		constraints.gridy = y++;
-		constraints.gridx = 0;
-		constraints.gridwidth = 2;
-		constraints.fill = GridBagConstraints.BOTH;
-		authorsFormField = new FormField("Autor(es)", 504);
-		authorsFormField.setHeight(100);
-		authorsFormField.setEditable(isEditable);
-		authorsFormField.isMultiline(true);
-		formContainer.add(authorsFormField, constraints);
+    constraints.insets = new Insets(0, 0, 16, 0);
+    constraints.gridwidth = 2;
+    constraints.gridx = 0;
+    constraints.gridy = y++;
+    titleFormField = new FormField("Título do Artigo", 0);
+    titleFormField.setEditable(isEditable);
+    formContainer.add(titleFormField, constraints);
 
-		constraints.gridwidth = 1;
-		constraints.weightx = 0.5;
-		constraints.gridy = y;
-		constraints.insets = new Insets(0, 0, 16, 12);
-		publicationDatePicker = new DatePicker("Data de Publicação", 0);
-		publicationDatePicker.setEditable(isEditable);
-		formContainer.add(publicationDatePicker, constraints);
+    constraints.insets = new Insets(0, 0, 16, 0);
+    constraints.gridy = y++;
+    constraints.gridx = 0;
+    constraints.gridwidth = 2;
+    constraints.fill = GridBagConstraints.BOTH;
+    authorsFormField = new FormField("Autor(es)", 504);
+    authorsFormField.setHeight(100);
+    authorsFormField.setEditable(isEditable);
+    authorsFormField.isMultiline(true);
+    formContainer.add(authorsFormField, constraints);
 
-		constraints.insets = new Insets(0, 12, 16, 0);
-		constraints.gridwidth = 1;
-		constraints.gridx = 1;
-		constraints.gridy = y++;
-		keywordsFormField = new FormField("Palavras-chaves", 0);
-		keywordsFormField.setEditable(isEditable);
-		formContainer.add(keywordsFormField, constraints);
-		
-		constraints.weightx = 0;
-		constraints.gridwidth = 2;
-		constraints.gridx = 0;
-		constraints.gridy = y++;
-		constraints.insets = new Insets(0, 0, 16, 0);
+    constraints.gridwidth = 1;
+    constraints.weightx = 0.5;
+    constraints.gridy = y;
+    constraints.insets = new Insets(0, 0, 16, 12);
+    publicationDatePicker = new DatePicker("Data de Publicação", 0);
+    publicationDatePicker.setEditable(isEditable);
+    formContainer.add(publicationDatePicker, constraints);
 
-		formContainer.add(getSectionLabel("Conteúdo do Artigo"), constraints);
+    constraints.insets = new Insets(0, 12, 16, 0);
+    constraints.gridwidth = 1;
+    constraints.gridx = 1;
+    constraints.gridy = y++;
+    keywordsFormField = new FormField("Palavras-chaves", 0);
+    keywordsFormField.setEditable(isEditable);
+    formContainer.add(keywordsFormField, constraints);
 
-		constraints.insets = new Insets(0, 0, 16, 0);
-		constraints.gridy = y++;
-		constraints.gridx = 0;
-		constraints.gridwidth = 2;
-		constraints.fill = GridBagConstraints.BOTH;
-		descriptionFormField = new FormField("Resumo/Descrição", 504);
-		descriptionFormField.setHeight(120);
-		descriptionFormField.setEditable(isEditable);
-		descriptionFormField.isMultiline(true);
-		formContainer.add(descriptionFormField, constraints);
+    constraints.weightx = 0;
+    constraints.gridwidth = 2;
+    constraints.gridx = 0;
+    constraints.gridy = y++;
+    constraints.insets = new Insets(0, 0, 16, 0);
 
-		constraints.gridwidth = 1;
-		constraints.weightx = 0.5;
-		constraints.gridy = y;
-		constraints.insets = new Insets(0, 0, 16, 12);
-		categoryFormField = new FormField("Categoria/Tópico", 0);
-		categoryFormField.setEditable(isEditable);
-		formContainer.add(categoryFormField, constraints);
+    formContainer.add(getSectionLabel("Conteúdo do Artigo"), constraints);
 
-		constraints.insets = new Insets(0, 12, 16, 0);
-		constraints.gridwidth = 1;
-		constraints.gridx = 1;
-		constraints.gridy = y++;
-		urlFormField = new FormField("URL/Link", 0);
-		urlFormField.setEditable(isEditable);
-		formContainer.add(urlFormField, constraints);
+    constraints.insets = new Insets(0, 0, 16, 0);
+    constraints.gridy = y++;
+    constraints.gridx = 0;
+    constraints.gridwidth = 2;
+    constraints.fill = GridBagConstraints.BOTH;
+    descriptionFormField = new FormField("Resumo/Descrição", 504);
+    descriptionFormField.setHeight(120);
+    descriptionFormField.setEditable(isEditable);
+    descriptionFormField.isMultiline(true);
+    formContainer.add(descriptionFormField, constraints);
 
-		GridBagConstraints fillerConstraints = new GridBagConstraints();
-		fillerConstraints.fill = GridBagConstraints.BOTH;
-		fillerConstraints.weighty = 1.0;
-		fillerConstraints.gridwidth = 2;
-		fillerConstraints.gridx = 0;
-		fillerConstraints.gridy = y++;
+    constraints.gridwidth = 1;
+    constraints.weightx = 0.5;
+    constraints.gridy = y;
+    constraints.insets = new Insets(0, 0, 16, 12);
+    categoryFormField = new FormField("Categoria/Tópico", 0);
+    categoryFormField.setEditable(isEditable);
+    formContainer.add(categoryFormField, constraints);
 
-		JPanel filler = new JPanel();
-		filler.setOpaque(false);
+    constraints.insets = new Insets(0, 12, 16, 0);
+    constraints.gridwidth = 1;
+    constraints.gridx = 1;
+    constraints.gridy = y++;
+    urlFormField = new FormField("URL/Link", 0);
+    urlFormField.setEditable(isEditable);
+    formContainer.add(urlFormField, constraints);
 
-		formContainer.add(filler, fillerConstraints);
+    GridBagConstraints fillerConstraints = new GridBagConstraints();
+    fillerConstraints.fill = GridBagConstraints.BOTH;
+    fillerConstraints.weighty = 1.0;
+    fillerConstraints.gridwidth = 2;
+    fillerConstraints.gridx = 0;
+    fillerConstraints.gridy = y++;
 
-		JScrollPane scrollPane = new JScrollPane(formContainer);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.getViewport().setBackground(ColorsManager.getOnBackgroundColor());
-		scrollPane.setBorder(null);
+    JPanel filler = new JPanel();
+    filler.setOpaque(false);
 
-		return scrollPane;
-	}
+    formContainer.add(filler, fillerConstraints);
 
-	private JLabel getSectionLabel(String text) {
-		JLabel label = new JLabel(text, JLabel.LEFT);
-		label.setFont(FontsManager.getFont(FontType.SEMI_BOLD, DimensManager.getSectionLabelFontsize()));
-		label.setOpaque(false);
-		ComponentDecorator.addPaddingBottom(label, 12);
-		return label;
-	}
+    JScrollPane scrollPane = new JScrollPane(formContainer);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.getViewport().setBackground(ColorsManager.getOnBackgroundColor());
+    scrollPane.setBorder(null);
 
-	private JPanel getButtonsContainer() {
-		JPanel buttonsContainer = new JPanel();
-		buttonsContainer.setLayout(new FlowLayout(FlowLayout.RIGHT, 24, 0));
-		buttonsContainer.setOpaque(false);
+    return scrollPane;
+  }
 
-		if (isEditable) {
-			JPanel cancelButtonContainer = new JPanel() {
-				@Override
-				protected void paintComponent(Graphics g) {
-					super.paintComponent(g);
-					Graphics2D g2d = (Graphics2D) g;
+  private JLabel getSectionLabel(String text) {
+    JLabel label = new JLabel(text, JLabel.LEFT);
+    label.setFont(FontsManager.getFont(FontType.SEMI_BOLD, DimensManager.getSectionLabelFontsize()));
+    label.setOpaque(false);
+    ComponentDecorator.addPaddingBottom(label, 12);
+    return label;
+  }
 
-					int width = getWidth();
-					int height = getHeight();
+  private JPanel getButtonsContainer() {
+    JPanel buttonsContainer = new JPanel();
+    buttonsContainer.setLayout(new FlowLayout(FlowLayout.RIGHT, 24, 0));
+    buttonsContainer.setOpaque(false);
 
-					setBackground(ColorsManager.getOnBackgroundColor());
+    if (isEditable) {
+      JPanel cancelButtonContainer = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+          super.paintComponent(g);
+          Graphics2D g2d = (Graphics2D) g;
 
-					RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+          int width = getWidth();
+          int height = getHeight();
 
-					g2d.setColor(ColorsManager.getButtonBackgroundSecondary());
-					g2d.fill(roundedRectangle);
-				}
-			};
+          setBackground(ColorsManager.getOnBackgroundColor());
 
-			Button cancelButton = new Button(ButtonType.BASIC, "CANCELAR");
-			cancelButton.setForeground(ColorsManager.getTextColorDark());
-			cancelButton.setBorder(null);
-			ComponentDecorator.addPadding(cancelButton, 6, 16);
+          RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
 
-			cancelButtonContainer.add(cancelButton);
-			cancelButtonContainer.setBorder(null);
+          g2d.setColor(ColorsManager.getButtonBackgroundSecondary());
+          g2d.fill(roundedRectangle);
+        }
+      };
 
-			cancelButton.addActionListener(event -> dispose());
-			buttonsContainer.add(cancelButtonContainer);
-		}
+      Button cancelButton = new Button(ButtonType.BASIC, "CANCELAR");
+      cancelButton.setForeground(ColorsManager.getTextColorDark());
+      cancelButton.setBorder(null);
+      ComponentDecorator.addPadding(cancelButton, 6, 16);
 
-		JPanel confirmButtonContainer = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g;
+      cancelButtonContainer.add(cancelButton);
+      cancelButtonContainer.setBorder(null);
 
-				int width = getWidth();
-				int height = getHeight();
+      cancelButton.addActionListener(event -> dispose());
+      buttonsContainer.add(cancelButtonContainer);
+    }
 
-				setBackground(ColorsManager.getOnBackgroundColor());
+    JPanel confirmButtonContainer = new JPanel() {
+      @Override
+      protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
 
-				RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
+        int width = getWidth();
+        int height = getHeight();
 
-				g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
-				g2d.fill(roundedRectangle);
-			}
-		};
+        setBackground(ColorsManager.getOnBackgroundColor());
 
-		Button confirmButton = new Button(ButtonType.BASIC, "CONFIRMAR");
-		confirmButton.setForeground(ColorsManager.getTextColorLight());
-		confirmButton.setBorder(null);
-		ComponentDecorator.addPadding(confirmButton, 6, 16);
+        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, width, height, 24, 24);
 
-		confirmButtonContainer.add(confirmButton);
-		confirmButtonContainer.setBorder(null);
+        g2d.setColor(ColorsManager.getButtonBackgroundPrimary());
+        g2d.fill(roundedRectangle);
+      }
+    };
 
-		confirmButton.addActionListener(event -> confirm());
+    Button confirmButton = new Button(ButtonType.BASIC, "CONFIRMAR");
+    confirmButton.setForeground(ColorsManager.getTextColorLight());
+    confirmButton.setBorder(null);
+    ComponentDecorator.addPadding(confirmButton, 6, 16);
 
-		buttonsContainer.add(confirmButtonContainer);
+    confirmButtonContainer.add(confirmButton);
+    confirmButtonContainer.setBorder(null);
 
-		ComponentDecorator.addPadding(buttonsContainer, 24, 0);
+    confirmButton.addActionListener(event -> confirm());
 
-		return buttonsContainer;
-	}
+    buttonsContainer.add(confirmButtonContainer);
 
-	private void confirm() {
+    ComponentDecorator.addPadding(buttonsContainer, 24, 0);
 
-		if (isEditable) {
+    return buttonsContainer;
+  }
 
-			if ( actionType == PaperActionType.ADD_PAPER )
-				paper = new Paper();
+  private void confirm() {
 
-			String title = titleFormField.getText();
-			String authors = authorsFormField.getText();
-			LocalDate publicationDate = publicationDatePicker.getDate();
-			String keywords = keywordsFormField.getText();
-			String description = descriptionFormField.getText();
-			String category = categoryFormField.getText();
-			String url = urlFormField.getText();
+    if (isEditable) {
 
-			paper.setTitle(title);
-			paper.setAuthors(authors);
-			paper.setPublicationDate(publicationDate);
-			paper.setKeywords(keywords);
-			paper.setDescription(description);
-			paper.setCategory(category);
-			paper.setUrl(url);
+      if (actionType == PaperActionType.ADD_PAPER)
+        paper = new Paper();
 
-			if ( actionType == PaperActionType.ADD_PAPER ) PaperService.postPaper(paper);
-			else if ( actionType == PaperActionType.EDIT_PAPER ) PaperService.updatePaperById(paper.getId(), paper);
-		
-			if (teacher == null) papersTableModel.setPaperList(PaperService.getPapers());
-			else {
-				ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
-				if (papers != null)
-					papersTableModel.setPaperList(papers);
-				}
-			}
+      String title = titleFormField.getText();
+      String authors = authorsFormField.getText();
+      LocalDate publicationDate = publicationDatePicker.getDate();
+      String keywords = keywordsFormField.getText();
+      String description = descriptionFormField.getText();
+      String category = categoryFormField.getText();
+      String url = urlFormField.getText();
 
-		dispose();
-	}
+      paper.setTitle(title);
+      paper.setAuthors(authors);
+      paper.setPublicationDate(publicationDate);
+      paper.setKeywords(keywords);
+      paper.setDescription(description);
+      paper.setCategory(category);
+      paper.setUrl(url);
+
+      if (actionType == PaperActionType.ADD_PAPER)
+        PaperService.postPaper(paper);
+      else if (actionType == PaperActionType.EDIT_PAPER)
+        PaperService.updatePaperById(paper.getId(), paper);
+
+      if (teacher == null)
+        papersTableModel.setPaperList(PaperService.getPapers());
+      else {
+        ArrayList<Paper> papers = PaperService.getPapersByAuthor(teacher.getName());
+        if (papers != null)
+          papersTableModel.setPaperList(papers);
+      }
+    }
+
+    dispose();
+  }
 }
