@@ -21,84 +21,104 @@ import res.values.DimensManager;
 import utils.ComponentDecorator;
 import utils.Observable;
 
+/**
+ * Um painel de navegação personalizado que exibe botões de navegação.
+ */
 public class Navigation extends JPanel implements ActionListener {
-	private JButton activedButton;
-	private int qButton;
-	int widht;
+    private JButton activedButton;
+    private int qButton;
+    int width;
 
-	private Observable observable;
+    private Observable observable;
 
-	public Navigation(int widht, int height, ActionListener actionListener) {
-		JLabel titleLabel = new JLabel("MENU");
+    /**
+     * Cria um painel de navegação com a largura e altura especificadas.
+     *
+     * @param width          A largura do painel de navegação.
+     * @param height         A altura do painel de navegação.
+     * @param actionListener Um ouvinte de ação para os botões de navegação.
+     */
+    public Navigation(int width, int height, ActionListener actionListener) {
+        JLabel titleLabel = new JLabel("MENU");
 
-		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(widht, height));
-		setMaximumSize((getPreferredSize()));
-		setOpaque(false);
+        setLayout(new GridBagLayout());
+        setPreferredSize(new Dimension(width, height));
+        setMaximumSize(getPreferredSize());
+        setOpaque(false);
 
-		int fillHorizontal = GridBagConstraints.HORIZONTAL;
-		this.widht = widht;
+        int fillHorizontal = GridBagConstraints.HORIZONTAL;
+        this.width = width;
 
-		GridBagConstraints gbcTitleLabel = getButtonContrainst(fillHorizontal, 1.0, 1, 0, 0);
+        GridBagConstraints gbcTitleLabel = getButtonConstraints(fillHorizontal, 1.0, 1, 0, 0);
 
-		ComponentDecorator.addPadding(titleLabel, 48, 24, 0, 24);
+        ComponentDecorator.addPadding(titleLabel, 48, 24, 0, 24);
 
-		if (!FontsManager.getLoadError()) {
-			titleLabel.setFont(FontsManager.getFont(FontType.MEDIUM, DimensManager.getTitleSize()));
-		}
+        if (!FontsManager.getLoadError()) {
+            titleLabel.setFont(FontsManager.getFont(FontType.MEDIUM, DimensManager.getTitleSize()));
+        }
 
-		add(titleLabel, gbcTitleLabel);
+        add(titleLabel, gbcTitleLabel);
 
-		observable = new Observable();
-	}
+        observable = new Observable();
+    }
 
-	public void setItem(String label, ImageIcon icon, String tag) {
+    /**
+     * Define um item de navegação com um rótulo, um ícone e uma tag associada.
+     *
+     * @param label O rótulo do item de navegação.
+     * @param icon  O ícone do item de navegação.
+     * @param tag   A tag associada ao item de navegação.
+     */
+    public void setItem(String label, ImageIcon icon, String tag) {
+        Button button = new Button(ButtonType.BASIC, label, ColorsManager.getOnBackgroundColor());
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setIcon(icon);
+        button.setMinimumSize(new Dimension(width, 48));
 
-		Button button = new Button(ButtonType.BASIC, label, ColorsManager.getOnBackgroundColor());
-		button.setHorizontalAlignment(SwingConstants.LEFT);
-		button.setIcon(icon);
-		button.setMinimumSize(new Dimension(widht, 48));
+        if (!FontsManager.getLoadError()) button.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
 
-		if ( !FontsManager.getLoadError() )	button.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
+        if (qButton == 0) {
+            if (!FontsManager.getLoadError()) button.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
+            activedButton = button;
+        }
 
-		if (qButton == 0) {
-			// button.setBackground(Color.BLUE);
-			if ( !FontsManager.getLoadError() )	button.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
-			activedButton = button;
-		}
+        int fillHorizontal = GridBagConstraints.HORIZONTAL;
 
-		int fillHorizontal = GridBagConstraints.HORIZONTAL;
+        GridBagConstraints gbcButton1 = getButtonConstraints(fillHorizontal, 1.0, 2, 0, qButton + 1);
+        gbcButton1.insets = new Insets(16, 0, 0, 0);
+        gbcButton1.weighty = 1.5;
 
-		GridBagConstraints gbcButton1 = getButtonContrainst(fillHorizontal, 1.0, 2, 0, qButton + 1);
-		gbcButton1.insets = new Insets(16, 0, 0, 0);
-		gbcButton1.weighty = 1.5;
+        add(button, gbcButton1);
+        qButton++;
 
-		add(button, gbcButton1);
-		qButton++;
+        button.setActionCommand(tag);
+        button.addActionListener(this);
+    }
 
-		button.setActionCommand(tag);
-		button.addActionListener(this);
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (!FontsManager.getLoadError()) activedButton.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
+        activedButton = (JButton) e.getSource();
+        observable.notifyObservers(e.getActionCommand());
+        if (!FontsManager.getLoadError()) activedButton.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getButtonFontsizeMedium()));
-		activedButton = (JButton) e.getSource();
-		observable.notifyObservers(e.getActionCommand());
-		if ( !FontsManager.getLoadError() )	activedButton.setFont(FontsManager.getFont(FontType.SEMI_BOLD, (int) (1.1 * DimensManager.getButtonFontsizeMedium())));
-	}
+    private GridBagConstraints getButtonConstraints(int fill, double weightx, int gridwidth, int gridx, int gridy) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = fill;
+        gbc.weightx = weightx;
+        gbc.gridwidth = gridwidth;
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        return gbc;
+    }
 
-	private GridBagConstraints getButtonContrainst(int fill, double weightx, int gridwidth, int gridx, int gridy) {
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = fill;
-		gbc.weightx = weightx;
-		gbc.gridwidth = gridwidth;
-		gbc.gridx = gridx;
-		gbc.gridy = gridy;
-		return gbc;
-	}
-
-	public Observable getObservable() {
-		return observable;
-	}
+    /**
+     * Obtém o objeto observável associado ao painel de navegação.
+     *
+     * @return O objeto observável.
+     */
+    public Observable getObservable() {
+        return observable;
+    }
 }

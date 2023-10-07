@@ -1,10 +1,8 @@
 package app.frontend.components;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.util.EventObject;
-
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -17,128 +15,188 @@ import res.values.ColorsManager;
 import res.values.DimensManager;
 import utils.ComponentDecorator;
 
+/**
+ * Uma tabela personalizável para exibir dados tabulares.
+ */
 public class Table extends JPanel {
-	private JTable table;
+  private JTable table;
 
-	private static final Color COLOR_ON_BACKGROUND = Color.WHITE; // Defina sua cor aqui
+  private static final Color COLOR_ON_BACKGROUND = Color.WHITE;
 
-	public enum CellContentAlignment {
-		START, CENTER, END
-	}
+  /**
+   * Define o alinhamento horizontal das células da tabela.
+   */
+  public enum CellContentAlignment {
+    START, CENTER, END
+  }
 
-	public static class CellRenderer extends DefaultTableCellRenderer {
-		private Component component;
+  /**
+   * Um renderizador de célula personalizado para a tabela.
+   */
+  public static class CellRenderer extends DefaultTableCellRenderer {
+    private Component component;
 
-		public CellRenderer(Component component) {
-			this.component = component;
-			setHorizontalAlignment(SwingConstants.LEFT);
-		}
+    /**
+     * Cria um novo renderizador de célula personalizado.
+     *
+     * @param component O componente a ser renderizado.
+     */
+    public CellRenderer(Component component) {
+      this.component = component;
+      setHorizontalAlignment(SwingConstants.LEFT);
+    }
 
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			if (isSelected)
-				component.setBackground(table.getSelectionBackground());
-			else
-				component.setBackground(table.getBackground());
-			return component;
-		}
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+        int row, int column) {
+      if (isSelected) {
+        component.setBackground(table.getSelectionBackground());
+      } else {
+        component.setBackground(table.getBackground());
+      }
 
-	}
+      // Verifica se esta é a linha selecionada e define a visibilidade
+      boolean isRowSelected = table.getSelectionModel().isSelectedIndex(row);
+      component.setVisible(isRowSelected);
 
-	public static class CellEditor extends AbstractCellEditor implements TableCellEditor {
+      return component;
+    }
+  }
 
-		private Component component;
+ /**
+ * Um editor de célula personalizado para a tabela.
+ */
+public static class CellEditor extends AbstractCellEditor implements TableCellEditor {
 
-		public CellEditor(Component component) {
-			this.component = component;
-		}
+    private Component component;
 
-		@Override
-		public Object getCellEditorValue() {
-			return null;
-		}
+    /**
+     * Cria um novo editor de célula personalizado.
+     *
+     * @param component O componente a ser editado.
+     */
+    public CellEditor(Component component) {
+        this.component = component;
+    }
 
-		@Override
-		public boolean isCellEditable(EventObject e) {
-			return true;
-		}
+    @Override
+    public Object getCellEditorValue() {
+        return null;
+    }
 
-		@Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-			if (isSelected)
-				component.setBackground(table.getSelectionBackground());
-			else
-				component.setBackground(table.getBackground());
-			return component;
-		}
-	}
+    @Override
+    public boolean isCellEditable(EventObject e) {
+        return true;
+    }
 
-	public Table(AbstractTableModel tableModel) {
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setHorizontalAlignment(SwingConstants.LEFT);
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        component.setBackground(table.getSelectionBackground());
 
-		table = new JTable(tableModel);
-		table.setBackground(ColorsManager.getOnBackgroundColor());
-		table.setShowVerticalLines(false);
-		table.setRowHeight(DimensManager.getRowHeight());
+        // Certifique-se de que o componente seja visível durante a edição
+        component.setVisible(true);
 
-		for (int i = 0; i < table.getColumnCount(); i++)
-			table.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        return component;
+    }
+}
 
-		JTableHeader tableHeader = table.getTableHeader();
-		tableHeader.setBackground(COLOR_ON_BACKGROUND);
-		tableHeader.setPreferredSize(new Dimension(0, 40));
-		tableHeader.setSize(tableHeader.getPreferredSize());
-		tableHeader.setDefaultRenderer(renderer);
-		ComponentDecorator.addBorderBottom(tableHeader, 1, Color.BLACK);
 
-		if (!FontsManager.getLoadError()) {
-			tableHeader.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getTableHeaderTextsize()));
-			table.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getTableItemTextsize()));
-		}
+  /**
+   * Cria uma nova tabela personalizada com o modelo de tabela especificado.
+   *
+   * @param tableModel O modelo de tabela a ser usado na tabela.
+   */
+  public Table(AbstractTableModel tableModel) {
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+    renderer.setHorizontalAlignment(SwingConstants.LEFT);
 
-		ComponentDecorator.addPadding(table, 10);
-		JScrollPane tableScroll = new JScrollPane(table);
-		tableScroll.setBorder(BorderFactory.createEmptyBorder());
-		tableScroll.getViewport().setBackground(ColorsManager.getOnBackgroundColor());
+    table = new JTable(tableModel);
+    table.setBackground(ColorsManager.getOnBackgroundColor());
+    table.setShowVerticalLines(false);
+    table.setRowHeight(DimensManager.getRowHeight());
 
-		setLayout(new BorderLayout());
-		add(tableScroll, BorderLayout.CENTER);
-	}
+    for (int i = 0; i < table.getColumnCount(); i++)
+      table.getColumnModel().getColumn(i).setCellRenderer(renderer);
 
-	public void setCustomColumn(int columnIndex, CellEditor cellEditor, CellRenderer columnRenderer) {
-		table.getColumnModel().getColumn(columnIndex).setCellEditor(cellEditor);
-		table.getColumnModel().getColumn(columnIndex).setCellRenderer(columnRenderer);;
-	}
+    JTableHeader tableHeader = table.getTableHeader();
+    tableHeader.setBackground(COLOR_ON_BACKGROUND);
+    tableHeader.setPreferredSize(new Dimension(0, 40));
+    tableHeader.setSize(tableHeader.getPreferredSize());
+    tableHeader.setDefaultRenderer(renderer);
+    ComponentDecorator.addBorderBottom(tableHeader, 1, Color.BLACK);
 
-	public void setColumnWidth(int columnIndex, int widht) {
-		TableColumn column = table.getColumnModel().getColumn(columnIndex);
-		column.setPreferredWidth(widht);
-		column.setMaxWidth(column.getPreferredWidth());
-		column.setMaxWidth(column.getPreferredWidth());
-	}
+    if (!FontsManager.getLoadError()) {
+      tableHeader.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getTableHeaderTextsize()));
+      table.setFont(FontsManager.getFont(FontType.REGULAR, DimensManager.getTableItemTextsize()));
+    }
 
-	public void setHorizontalAlignment(int columnIndex, CellContentAlignment a) {
-		TableColumn column = table.getColumnModel().getColumn(columnIndex);
-		DefaultTableCellRenderer align = new DefaultTableCellRenderer();
+    ComponentDecorator.addPadding(table, 10);
+    JScrollPane tableScroll = new JScrollPane(table);
+    tableScroll.setBorder(BorderFactory.createEmptyBorder());
+    tableScroll.getViewport().setBackground(ColorsManager.getOnBackgroundColor());
 
-		switch (a) {
-			case END: {
-				align.setHorizontalAlignment(SwingConstants.RIGHT);
-				break;
-			}
+    setLayout(new BorderLayout());
+    add(tableScroll, BorderLayout.CENTER);
+  }
 
-			default: {
-				align.setHorizontalAlignment(SwingConstants.LEFT);
-				break;
-			}
-		}
+  /**
+   * Define um editor de célula personalizado e um renderizador de célula
+   * personalizado para uma coluna específica.
+   *
+   * @param columnIndex    O índice da coluna a ser personalizada.
+   * @param cellEditor     O editor de célula personalizado.
+   * @param columnRenderer O renderizador de célula personalizado.
+   */
+  public void setCustomColumn(int columnIndex, CellEditor cellEditor, CellRenderer columnRenderer) {
+    table.getColumnModel().getColumn(columnIndex).setCellEditor(cellEditor);
+    table.getColumnModel().getColumn(columnIndex).setCellRenderer(columnRenderer);
+  }
 
-		column.setCellRenderer(align);
-	}
+  /**
+   * Define a largura de uma coluna específica.
+   *
+   * @param columnIndex O índice da coluna cuja largura deve ser definida.
+   * @param width       A largura da coluna.
+   */
+  public void setColumnWidth(int columnIndex, int width) {
+    TableColumn column = table.getColumnModel().getColumn(columnIndex);
+    column.setPreferredWidth(width);
+    column.setMaxWidth(column.getPreferredWidth());
+    column.setMaxWidth(column.getPreferredWidth());
+  }
 
-	public JTable getComponent() {
-		return table;
-	}
+  /**
+   * Define o alinhamento horizontal das células de uma coluna específica.
+   *
+   * @param columnIndex O índice da coluna cujas células devem ter o alinhamento
+   *                    horizontal definido.
+   * @param alignment   O alinhamento horizontal desejado.
+   */
+  public void setHorizontalAlignment(int columnIndex, CellContentAlignment alignment) {
+    TableColumn column = table.getColumnModel().getColumn(columnIndex);
+    DefaultTableCellRenderer align = new DefaultTableCellRenderer();
+
+    switch (alignment) {
+      case END: {
+        align.setHorizontalAlignment(SwingConstants.RIGHT);
+        break;
+      }
+
+      default: {
+        align.setHorizontalAlignment(SwingConstants.LEFT);
+        break;
+      }
+    }
+
+    column.setCellRenderer(align);
+  }
+
+  /**
+   * Obtém o componente da tabela.
+   *
+   * @return O componente `JTable` da tabela personalizada.
+   */
+  public JTable getComponent() {
+    return table;
+  }
 }
