@@ -138,20 +138,6 @@ public class App extends JFrame {
     add(windows, BorderLayout.CENTER);
   }
 
-  public static void changeComponentColors(Container container, Color foregroundColor, Color backgroundColor) {
-    for (Component component : container.getComponents()) {
-      if (component instanceof Container) {
-        // If the component is a container (e.g., JPanel), recursively change colors of
-        // its components.
-        changeComponentColors((Container) component, foregroundColor, backgroundColor);
-      } else {
-        // Change the colors of non-container components (e.g., JLabel, JButton).
-        component.setForeground(foregroundColor);
-        component.setBackground(backgroundColor);
-      }
-    }
-  }
-
   /**
    * Método principal que inicia a aplicação.
    *
